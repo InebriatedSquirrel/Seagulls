@@ -7,7 +7,6 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
 
 # Compiled Static libraries
 *.lai
@@ -19,3 +18,9 @@
 *.exe
 *.out
 *.app
+
+# Unreal Directories
+/Binaries
+/DerivedDataCache
+/Intermediate
+/Saved
