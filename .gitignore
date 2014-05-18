@@ -19,6 +19,11 @@
 *.out
 *.app
 
+# Visual Studio project files
+*.sln
+*.suo
+*.sdf
+
 # Unreal Directories
 /Binaries
 /DerivedDataCache
