@@ -19,6 +19,10 @@ Getting Started
 5. Navigate to the directory on your computer where it was cloned
 6. Proceed to the correct Compiling and Building section
 
+Official Documentation for Compiling
+--------------
+* Below is just an outline specific to this project, I recommend referring to the official Unreal walkthrough [here] (https://docs.unrealengine.com/latest/INT/Programming/Development/CompilingProjects/index.html)
+
 Compiling and Building (Windows)
 --------------
 1. Install [Microsoft Visual Studio 2013] (http://www.microsoft.com/en-us/download/details.aspx?id=40787)
@@ -26,6 +30,7 @@ Compiling and Building (Windows)
 3. Select "Generate visual studio project files"
 4. Open the generated .sln file in Visual Studio 2013
 5. Wait for Visual Studio to generate required files
+6. Ensure that your solution configuration is Development - Windows
 6. Hit F7 or right click on "Seagull Game" in the Solution Explorer and click "Build"
 7. Wait for building to finish
 8. You can now open the .uproject file in the Unreal Editor
@@ -34,10 +39,11 @@ Compiling and Building (Mac)
 --------------
 1. Install [Xcode 5] (https://developer.apple.com/xcode/downloads/)
 2. Right click on the .uproject file in the main folder
-3. Select "Generate Xcode project files"
+3. Select "Generate Xcode project file"
 4. Open the generated .xcodeproj file in Xcode 5
 5. Wait for the project to open
-6. Navigate to Project > Build For > Running
+6. On the top toolbar, ensure that SeagullGameEditor - Mac > My Mac 64 bit is selected as the active scheme
+6. Navigate to Project > Build For > Profiling
 7. Wait for building to finish
 8. You can now open the .uproject file in the Unreal Editor
 
