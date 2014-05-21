@@ -1,4 +1,4 @@
-Seagull Game (Working Title)
+Steven Seagull (Working Title)
 ==============
 
 Unreal Project for UCF Game Workshop Summer 2014
