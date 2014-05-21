@@ -25,6 +25,9 @@
 *.sdf
 *.opensdf
 
+# Xcode project files
+*.xcodeproj
+
 # Unreal Directories
 /Binaries
 /DerivedDataCache
