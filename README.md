@@ -31,9 +31,9 @@ Compiling and Building (Windows)
 4. Open the generated .sln file in Visual Studio 2013
 5. Wait for Visual Studio to generate required files
 6. Ensure that your solution configuration is Development - Windows
-6. Hit F7 or right click on "Seagull Game" in the Solution Explorer and click "Build"
-7. Wait for building to finish
-8. You can now open the .uproject file in the Unreal Editor
+7. Hit F7 or right click on "Seagull Game" in the Solution Explorer and click "Build"
+8. Wait for building to finish
+9. You can now open the .uproject file in the Unreal Editor
 
 Compiling and Building (Mac)
 --------------
@@ -43,9 +43,9 @@ Compiling and Building (Mac)
 4. Open the generated .xcodeproj file in Xcode 5
 5. Wait for the project to open
 6. On the top toolbar, ensure that SeagullGameEditor - Mac > My Mac 64 bit is selected as the active scheme
-6. Navigate to Project > Build For > Profiling
-7. Wait for building to finish
-8. You can now open the .uproject file in the Unreal Editor
+7. Navigate to Project > Build For > Profiling
+8. Wait for building to finish
+9. You can now open the .uproject file in the Unreal Editor
 
 Branching and Committing
 --------------
