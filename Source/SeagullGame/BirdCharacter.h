@@ -2,29 +2,25 @@
 
 #pragma once
 
-#include "GameFramework/Pawn.h"
-#include "BirdPawn.generated.h"
+#include "GameFramework/Character.h"
+#include "BirdCharacter.generated.h"
 
 /**
  * 
  */
-UCLASS(config=Game)
-class ABirdPawn : public APawn
+UCLASS(config = Game)
+class ABirdCharacter : public ACharacter
 {
 public:
 	GENERATED_UCLASS_BODY()
 
-	/** StaticMesh component that will be the visuals for our flying pawn */
-	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly)
-	TSubobjectPtr<class UStaticMeshComponent> PlaneMesh;
-
 	/** Spring arm that will offset the camera */
 	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly)
-	TSubobjectPtr<class USpringArmComponent> SpringArm;
+		TSubobjectPtr<class USpringArmComponent> SpringArm;
 
 	/** Camera component that will be our viewpoint */
 	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly)
-	TSubobjectPtr<class UCameraComponent> Camera;
+		TSubobjectPtr<class UCameraComponent> Camera;
 
 	// Begin AActor overrides
 	virtual void Tick(float DeltaSeconds) OVERRIDE;
@@ -40,32 +36,15 @@ protected:
 	/** Bound to the vertical axis */
 	void ThrustInput(float Val);
 
-	/** Bound to the horizontal axis */
-	void MoveUpInput(float Val);
-
 	/** */
-	void MoveRightInput(float Val);
+	void OnRightFlap(float Val);
+
+	void RotateBird(float Val);
 
 private:
-
-	/** How quickly forward speed changes */
-	UPROPERTY(Category = Plane, EditAnywhere)
-		float Acceleration;
-
 	/** How quickly pawn can steer */
 	UPROPERTY(Category = Plane, EditAnywhere)
 		float TurnSpeed;
-
-	/** MAx forward speed */
-	UPROPERTY(Category = Pitch, EditAnywhere)
-		float MaxSpeed;
-
-	/** Min forward speed */
-	UPROPERTY(Category = Yaw, EditAnywhere)
-		float MinSpeed;
-
-	/** Current forward speed */
-	float CurrentForwardSpeed;
 
 	/** Current yaw speed */
 	float CurrentYawSpeed;
@@ -75,4 +54,10 @@ private:
 
 	/** Current roll speed */
 	float CurrentRollSpeed;
+
+	bool RightFlapped;
+
+	bool LeftFlapped;
+
+	bool ForwardPressed;
 };
