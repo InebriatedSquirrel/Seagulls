@@ -2,29 +2,29 @@
 
 #pragma once
 
-#include "GameFramework/Character.h"
-#include "BirdCharacter.generated.h"
+#include "GameFramework/Pawn.h"
+#include "BirdPawn.generated.h"
 
 /**
  * 
  */
-UCLASS()
-class ABirdCharacter : public ACharacter
+UCLASS(config=Game)
+class ABirdPawn : public APawn
 {
 public:
 	GENERATED_UCLASS_BODY()
 
-		/** StaticMesh component that will be the visuals for our flying pawn */
-		UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly)
-		TSubobjectPtr<class UStaticMeshComponent> PlaneMesh;
+	/** StaticMesh component that will be the visuals for our flying pawn */
+	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly)
+	TSubobjectPtr<class UStaticMeshComponent> PlaneMesh;
 
 	/** Spring arm that will offset the camera */
 	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly)
-		TSubobjectPtr<class USpringArmComponent> SpringArm;
+	TSubobjectPtr<class USpringArmComponent> SpringArm;
 
 	/** Camera component that will be our viewpoint */
 	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly)
-		TSubobjectPtr<class UCameraComponent> Camera;
+	TSubobjectPtr<class UCameraComponent> Camera;
 
 	// Begin AActor overrides
 	virtual void Tick(float DeltaSeconds) OVERRIDE;

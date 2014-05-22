@@ -1,10 +1,10 @@
 
 
 #include "SeagullGame.h"
-#include "BirdCharacter.h"
+#include "BirdPawn.h"
 
 
-ABirdCharacter::ABirdCharacter(const class FPostConstructInitializeProperties& PCIP)
+ABirdPawn::ABirdPawn(const class FPostConstructInitializeProperties& PCIP)
 	: Super(PCIP)
 {
 	// Structure to hold one-time initialization
@@ -12,7 +12,7 @@ ABirdCharacter::ABirdCharacter(const class FPostConstructInitializeProperties& P
 	{
 		ConstructorHelpers::FObjectFinderOptional<UStaticMesh> PlaneMesh;
 		FConstructorStatics()
-			: PlaneMesh(TEXT("/Game/Meshes/Bird/seagullModel.seagullModel"))
+			: PlaneMesh(TEXT("/Game/Meshes/Bird/seagullModel_Static.seagullModel_Static"))
 		{
 		}
 	};
@@ -43,7 +43,8 @@ ABirdCharacter::ABirdCharacter(const class FPostConstructInitializeProperties& P
 	MinSpeed = 500.f;
 	CurrentForwardSpeed = 500.f;
 }
-void ABirdCharacter::Tick(float DeltaSeconds)
+
+void ABirdPawn::Tick(float DeltaSeconds)
 {
 	const FVector LocalMove = FVector(CurrentForwardSpeed * DeltaSeconds, 0.f, 0.f);
 
@@ -61,14 +62,9 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 
 	// Call any parent class Tick implementation
 	Super::Tick(DeltaSeconds);
-
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("We are using BirdCharacter!"));
-	}
 }
 
-void ABirdCharacter::ReceiveHit(class UPrimitiveComponent* MyComp, class AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
+void ABirdPawn::ReceiveHit(class UPrimitiveComponent* MyComp, class AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
 {
 	Super::ReceiveHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
 
@@ -76,18 +72,18 @@ void ABirdCharacter::ReceiveHit(class UPrimitiveComponent* MyComp, class AActor*
 	CurrentForwardSpeed = 0.f;
 }
 
-void ABirdCharacter::SetupPlayerInputComponent(class UInputComponent* InputComponent)
+
+void ABirdPawn::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 {
 	check(InputComponent);
 
 	// Fine up and right axes
-	InputComponent->BindAxis("Thrust", this, &ABirdCharacter::ThrustInput);
-	InputComponent->BindAxis("MoveUp", this, &ABirdCharacter::MoveUpInput);
-	InputComponent->BindAxis("MoveRight", this, &ABirdCharacter::MoveRightInput);
+	InputComponent->BindAxis("Thrust", this, &ABirdPawn::ThrustInput);
+	InputComponent->BindAxis("MoveUp", this, &ABirdPawn::MoveUpInput);
+	InputComponent->BindAxis("MoveRight", this, &ABirdPawn::MoveRightInput);
 }
 
-
-void ABirdCharacter::ThrustInput(float Val)
+void ABirdPawn::ThrustInput(float Val)
 {
 	// Is there no input?
 	bool bHasInput = !FMath::IsNearlyEqual(Val, 0.f);
@@ -99,7 +95,7 @@ void ABirdCharacter::ThrustInput(float Val)
 	CurrentForwardSpeed = FMath::Clamp(NewForwardSpeed, MinSpeed, MaxSpeed);
 }
 
-void ABirdCharacter::MoveUpInput(float Val)
+void ABirdPawn::MoveUpInput(float Val)
 {
 	// Target pitch speed is based in input
 	float TargetPitchSpeed = (Val * TurnSpeed * -1.f);
@@ -111,7 +107,7 @@ void ABirdCharacter::MoveUpInput(float Val)
 	CurrentPitchSpeed = FMath::FInterpTo(CurrentPitchSpeed, TargetPitchSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
 }
 
-void ABirdCharacter::MoveRightInput(float Val)
+void ABirdPawn::MoveRightInput(float Val)
 {
 	// Target yaw speed is based on input
 	float TargetYawSpeed = (Val * TurnSpeed);
@@ -129,3 +125,5 @@ void ABirdCharacter::MoveRightInput(float Val)
 	// Smoothly interpolate roll speed
 	CurrentRollSpeed = FMath::FInterpTo(CurrentRollSpeed, TargetRollSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
 }
+
+

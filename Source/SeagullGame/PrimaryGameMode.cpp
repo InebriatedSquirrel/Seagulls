@@ -2,12 +2,12 @@
 
 #include "SeagullGame.h"
 #include "PrimaryGameMode.h"
-#include "BirdCharacter.h"
+#include "BirdPawn.h"
 
 APrimaryGameMode::APrimaryGameMode(const class FPostConstructInitializeProperties& PCIP)
 	: Super(PCIP)
 {
-	DefaultPawnClass = ABirdCharacter::StaticClass();
+	DefaultPawnClass = ABirdPawn::StaticClass();
 }
 
 void APrimaryGameMode::BeginPlay()
