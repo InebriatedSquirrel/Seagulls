@@ -37,28 +37,35 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 
 	if (RightFlapped && LeftFlapped)
 	{
-		const FVector LaunchForce = FVector(0.f, 0.f, 50.0f);
-		if (GetVelocity().Z < 500.0f){
+		BothTimer += DeltaSeconds;
+		if (BothTimer < 0.3f){
+			const FVector LaunchForce = FVector(0.f, 0.f, 450.0f);
+			if (GetVelocity().Z < 500.0f){
 
-			LaunchCharacter(LaunchForce, false, false);
+				LaunchCharacter(LaunchForce, false, false);
+			}
 		}
 	}
 	else if (RightFlapped){
-		RotateBird(1.0f);
-	//	RightFlapped = false;
-		const FVector LaunchForce = FVector(0.f, 0.f, 50.0f);
-		if (GetVelocity().Z < 100.0f){
+		RightTimer += DeltaSeconds;
+		if (RightTimer < 0.15f){
+			RotateBird(1.0f);
+			const FVector LaunchForce = FVector(0.f, 0.f, 50.0f);
+			if (GetVelocity().Z < 100.0f){
 
-			LaunchCharacter(LaunchForce, false, false);
+				LaunchCharacter(LaunchForce, false, false);
+			}
 		}
 	}
 	else if (LeftFlapped){
-		RotateBird(-1.0f);
-	//	LeftFlapped = false;
-		const FVector LaunchForce = FVector(0.f, 0.f, 50.0f);
-		if (GetVelocity().Z < 100.0f){
+		LeftTimer += DeltaSeconds;
+		if (LeftTimer < 0.15f){
+			RotateBird(-1.0f);
+			const FVector LaunchForce = FVector(0.f, 0.f, 50.0f);
+			if (GetVelocity().Z < 100.0f){
 
-			LaunchCharacter(LaunchForce, false, false);
+				LaunchCharacter(LaunchForce, false, false);
+			}
 		}
 	}
 
@@ -129,6 +136,9 @@ void ABirdCharacter::OnRightFlap(float Val)
 	{
 		RightFlapped = false;
 		LeftFlapped = false;
+		BothTimer = 0.0f;
+		RightTimer = 0.0f;
+		LeftTimer = 0.0f;
 	}
 	
 }

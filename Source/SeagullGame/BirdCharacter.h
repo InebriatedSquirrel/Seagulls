@@ -60,4 +60,10 @@ private:
 	bool LeftFlapped;
 
 	bool ForwardPressed;
+
+	float RightTimer;
+
+	float LeftTimer;
+
+	float BothTimer;
 };
