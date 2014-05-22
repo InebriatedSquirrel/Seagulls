@@ -2,7 +2,7 @@
 
 #include "SeagullGame.h"
 #include "PrimaryGameMode.h"
-#include "BirdPawn.h"
+#include "BirdCharacter.h"
 
 APrimaryGameMode::APrimaryGameMode(const class FPostConstructInitializeProperties& PCIP)
 	: Super(PCIP)
