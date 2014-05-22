@@ -36,9 +36,10 @@ protected:
 	/** Bound to the vertical axis */
 	void ThrustInput(float Val);
 
-	/** */
+	/** Event for Rotations*/
 	void OnRightFlap(float Val);
 
+	/** Rotates the bird around it's axis*/
 	void RotateBird(float Val);
 
 private:
@@ -55,12 +56,14 @@ private:
 	/** Current roll speed */
 	float CurrentRollSpeed;
 
+	/** Booleans for input tracking*/
 	bool RightFlapped;
 
 	bool LeftFlapped;
 
 	bool ForwardPressed;
 
+	/** Timers for wing flap spacing*/
 	float RightTimer;
 
 	float LeftTimer;

@@ -12,7 +12,9 @@ ABirdCharacter::ABirdCharacter(const class FPostConstructInitializeProperties& P
 	{
 
 	};
+	// Correct the mesh's axis - REMOVE THIS WITH NEW MESH
 	Mesh->AddLocalRotation(FRotator(0.f,270.0f,0.f));
+
 	// Create a spring arm component
 	SpringArm = PCIP.CreateDefaultSubobject<USpringArmComponent>(this, TEXT("SpringArm0"));
 	SpringArm->AttachTo(Mesh);
@@ -20,6 +22,8 @@ ABirdCharacter::ABirdCharacter(const class FPostConstructInitializeProperties& P
 	SpringArm->SocketOffset = FVector(0.f, 0.f, 60.f);
 	SpringArm->bEnableCameraLag = false;
 	SpringArm->CameraLagSpeed = 15.f;
+
+	// Further mesh axis correction
 	SpringArm->AddLocalRotation(FRotator(0.f, 90.0f, 0.0f));
 	
 
@@ -32,38 +36,50 @@ ABirdCharacter::ABirdCharacter(const class FPostConstructInitializeProperties& P
 	TurnSpeed = 50.f;
 }
 
+// Frame loop
 void ABirdCharacter::Tick(float DeltaSeconds)
 {
-
+	// If both wings were pressed, thrust upwards and don't rotate
 	if (RightFlapped && LeftFlapped)
 	{
+		// Manage the length of the force using a timer
 		BothTimer += DeltaSeconds;
 		if (BothTimer < 0.3f){
+			// Launch the player upwards at a moderate strength
 			const FVector LaunchForce = FVector(0.f, 0.f, 450.0f);
+			// Set a max limit on vertical velocity
 			if (GetVelocity().Z < 500.0f){
-
 				LaunchCharacter(LaunchForce, false, false);
 			}
 		}
 	}
-	else if (RightFlapped){
+	else if (RightFlapped)
+	{
+		// Manage the length of the force using a timer
 		RightTimer += DeltaSeconds;
 		if (RightTimer < 0.15f){
+			// Rotate the bird clockwise
 			RotateBird(1.0f);
+			// Launch the player upwards at a weak strength
 			const FVector LaunchForce = FVector(0.f, 0.f, 50.0f);
+			// Set a max limit on vertical velocity
 			if (GetVelocity().Z < 100.0f){
 
 				LaunchCharacter(LaunchForce, false, false);
 			}
 		}
 	}
-	else if (LeftFlapped){
+	else if (LeftFlapped)
+	{
+		// Manage the length of the force using a timer
 		LeftTimer += DeltaSeconds;
 		if (LeftTimer < 0.15f){
+			// Rotate the bird counter-clockwise
 			RotateBird(-1.0f);
+			// Launch the player upwards at a weak strength
 			const FVector LaunchForce = FVector(0.f, 0.f, 50.0f);
+			// Set a max limit on vertical velocity
 			if (GetVelocity().Z < 100.0f){
-
 				LaunchCharacter(LaunchForce, false, false);
 			}
 		}
@@ -75,6 +91,7 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 	DeltaRotation.Yaw = CurrentYawSpeed * DeltaSeconds;
 	DeltaRotation.Roll = CurrentRollSpeed * DeltaSeconds;
 	
+	// Apply the calculated rotation
 	AddControllerYawInput(DeltaRotation.Yaw);
 
 	// Smoothly interpolate to target yaw speed
@@ -95,18 +112,15 @@ void ABirdCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompo
 {
 	check(InputComponent);
 
-	// Fine up and right axes
 	InputComponent->BindAxis("Forward", this, &ABirdCharacter::ThrustInput);
-	//InputComponent->BindAxis("MoveUp", this, &ABirdCharacter::MoveUpInput);
-	//InputComponent->BindAxis("MoveRight", this, &ABirdCharacter::MoveRightInput);
 
 	InputComponent->BindAxis("RightWing", this, &ABirdCharacter::OnRightFlap);
-//	InputComponent->BindAction("LeftWing", IE_Pressed, this, &ABirdCharacter::OnLeftFlap);
 }
 
 void ABirdCharacter::ThrustInput(float Val)
 {
 	ForwardPressed = true;
+
 	// find out which way is forward
 	FRotator Rotation = Controller->GetControlRotation();
 
@@ -144,6 +158,7 @@ void ABirdCharacter::OnRightFlap(float Val)
 }
 void ABirdCharacter::RotateBird(float Val)
 {
+	//Rotate the bird based on turn speed
 	float TargetYawSpeed = (TurnSpeed * Val);
 
 	// Smoothly interpolate to target yaw speed
@@ -151,6 +166,5 @@ void ABirdCharacter::RotateBird(float Val)
 
 	// find out which way is forward
 	FRotator Rotation = Controller->GetControlRotation();
-
 }
 
