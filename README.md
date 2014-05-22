@@ -8,7 +8,7 @@ Things to Remember
 * Always create a branch when working on a feature, never work from the master branch
 * Be as descriptive as possible in commit comments
 * Always submit pull requests, do not merge your own branch with the master branch without approval
-* You must rebuild and compile the project with every major brancd sync/download. generating new VS or Xcode projects may also be required
+* You must rebuild and compile the project with every major branch sync/download. generating new VS or Xcode projects may also be required
 * Do not edit the .gitignore file, if changes need to be made, inform the Technical Director
 
 Getting Started
