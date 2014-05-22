@@ -46,7 +46,7 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 		BothTimer += DeltaSeconds;
 		if (BothTimer < 0.3f){
 			// Launch the player upwards at a moderate strength
-			const FVector LaunchForce = FVector(0.f, 0.f, 450.0f);
+			const FVector LaunchForce = FVector(0.f, 0.f, 350.0f);
 			// Set a max limit on vertical velocity
 			if (GetVelocity().Z < 500.0f){
 				LaunchCharacter(LaunchForce, false, false);
