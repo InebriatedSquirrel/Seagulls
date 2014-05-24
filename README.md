@@ -48,14 +48,26 @@ Compiling and Building (Mac)
 8. Wait for building to finish
 9. You can now open the .uproject file in the Unreal Editor
 
-Branching and Committing
+Branching
 --------------
 1. For every issue or trello card, create a new branch
 2. On Mac, navigate to the branches tab. On Windows, click the branches tab on the top right
 3. Create a new branch off of master and name it appropriately
 4. Ensure that you have switched your local files to the new branch
-5. Do work.
+5. Do work. (See Committing)
 6. Submit a pull request to merge your project with the main project (see below)
+
+Committing
+--------------
+1. Do work
+2. Open up the GitHub client
+3. Open up the correct repository listed on your local machine
+4. Ensure the listed changes are correct
+5. Ensure that you are on the correct branch
+6. In the commit box, type a brief title of your changes
+7. (Optional) Type a more detailed description in the comment box
+8. Commit the changes
+9. Hit the Sync button
 
 Pull Requests
 --------------
