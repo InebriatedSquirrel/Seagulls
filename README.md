@@ -59,11 +59,13 @@ Branching
 
 Deleting Branches
 --------------
+* Note - this will delete the branch from your local as well as the server, and as such should only be done once the server branch has been merged
+
 1. Server branches will beleted by the lead technical director
 2. When a server branch is deleted, it will remain listed on your local machine
 3. To delete this branch, click on the branches icon
 4. Click delete branch
-5. **Note - this will only delete it from your local machine, the server version should remain untouched
+
 
 Committing
 --------------
