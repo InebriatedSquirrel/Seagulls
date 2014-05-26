@@ -55,7 +55,15 @@ Branching
 3. Create a new branch off of master and name it appropriately
 4. Ensure that you have switched your local files to the new branch
 5. Do work. (See Committing)
-6. Submit a pull request to merge your project with the main project (see below)
+6. Submit a pull request to merge your project with the main project (see Pull Requests)
+
+Deleting Branches
+--------------
+1. Server branches will beleted by the lead technical director
+2. When a server branch is deleted, it will remain listed on your local machine
+3. To delete this branch, click on the branches icon
+4. Click delete branch
+5. **Note - this will only delete it from your local machine, the server version should remain untouched
 
 Committing
 --------------
