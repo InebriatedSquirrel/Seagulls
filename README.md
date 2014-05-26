@@ -63,7 +63,7 @@ Deleting Branches
 
 1. Server branches will beleted by the lead technical director
 2. When a server branch is deleted, it will remain listed on your local machine
-3. To delete this branch, click on the branches icon
+3. To delete this branch, click on the branches icon IN YOUR DESKTOP CLIENT
 4. Click delete branch
 
 
