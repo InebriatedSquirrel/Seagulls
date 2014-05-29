@@ -27,6 +27,19 @@ public:
 	virtual void ReceiveHit(class UPrimitiveComponent* MyComp, class AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) OVERRIDE;
 	// End AActor overrides
 
+	/** How quickly pawn can steer */
+	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadWrite)
+	float TurnSpeed;
+
+	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadWrite)
+	float flapStrength;
+
+	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadWrite)
+	float MaxVerticalFlapVelocity;
+
+	UPROPERTY(Category = Bird, BlueprintReadOnly)
+	bool gliding;
+
 protected:
 
 	// Begin APawn overrides
@@ -42,10 +55,15 @@ protected:
 	/** Rotates the bird around it's axis*/
 	void RotateBird(float Val);
 
+	/**  */
+	void Flap();
+
+	/**  */
+	void StopGlide();
+
 private:
-	/** How quickly pawn can steer */
-	UPROPERTY(Category = Plane, EditAnywhere)
-		float TurnSpeed;
+
+	
 
 	/** Current yaw speed */
 	float CurrentYawSpeed;
@@ -69,4 +87,6 @@ private:
 	float LeftTimer;
 
 	float BothTimer;
+
+	float ForwardFlapForce;
 };

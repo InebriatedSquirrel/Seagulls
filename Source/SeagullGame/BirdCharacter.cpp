@@ -34,6 +34,9 @@ ABirdCharacter::ABirdCharacter(const class FPostConstructInitializeProperties& P
 
 	// Set handling parameters
 	TurnSpeed = 50.f;
+	gliding = false;
+	MaxVerticalFlapVelocity = 500.0f;
+	flapStrength = 350.0f;
 }
 
 // Frame loop
@@ -97,6 +100,22 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 	// Smoothly interpolate to target yaw speed
 	CurrentYawSpeed = FMath::FInterpTo(CurrentYawSpeed, 0.0f, GetWorld()->GetDeltaSeconds(), 2.0f);
 
+	ForwardFlapForce = FMath::FInterpTo(ForwardFlapForce, 0.0f, GetWorld()->GetDeltaSeconds(), 5.0f);
+
+	if (gliding){
+		const FVector Direction = Controller->GetControlRotation().Vector();
+		//AddMovementInput(Direction, 0.2f);
+		AddMovementInput(FVector(0.0f,0.0f,-1.0f), 0.2f);
+		if (CharacterMovement->MovementMode != MOVE_Flying){
+			CharacterMovement->SetMovementMode(MOVE_Flying);
+		}
+		if (CharacterMovement->IsWalkable()){
+			CharacterMovement->SetMovementMode(MOVE_Walking);
+		}
+	}
+
+	
+
 	// Call any parent class Tick implementation
 	Super::Tick(DeltaSeconds);
 }
@@ -107,26 +126,53 @@ void ABirdCharacter::ReceiveHit(class UPrimitiveComponent* MyComp, class AActor*
 
 }
 
-
 void ABirdCharacter::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 {
 	check(InputComponent);
 
 	InputComponent->BindAxis("Forward", this, &ABirdCharacter::ThrustInput);
+	
+	InputComponent->BindAxis("Lateral", this, &ABirdCharacter::AddControllerYawInput);
+	InputComponent->BindAxis("Vertical", this, &ABirdCharacter::AddControllerPitchInput);
+	InputComponent->BindAction("Flap", IE_Pressed, this, &ABirdCharacter::Flap);
+	InputComponent->BindAction("Flap", IE_Released, this, &ABirdCharacter::StopGlide);
 
 	InputComponent->BindAxis("RightWing", this, &ABirdCharacter::OnRightFlap);
 }
 
+void ABirdCharacter::Flap(){
+	// Launch the player upwards at a weak strength
+	const FVector LaunchForce = FVector(0.f, 0.f, 250.0f);
+	const FVector Direction = Controller->GetControlRotation().Vector();
+	// Set a max limit on vertical velocity
+	if (GetVelocity().Z < 100.0f){
+		LaunchCharacter(LaunchForce, false, false);
+		ForwardFlapForce += 0.2f;
+	}
+
+	gliding = true;
+}
+void ABirdCharacter::StopGlide(){
+	gliding = false;
+	CharacterMovement->SetMovementMode(MOVE_Falling);
+}
 void ABirdCharacter::ThrustInput(float Val)
 {
 	ForwardPressed = true;
 
 	// find out which way is forward
 	FRotator Rotation = Controller->GetControlRotation();
-
-	// add movement in that direction
-	const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::X);
-	AddMovementInput(Direction, Val);
+	if (!gliding){
+		// add movement in that direction
+		//const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::X, EAxis::Y, EAxis::Z);
+		const FVector Direction = Controller->GetControlRotation().Vector();
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, Direction.ToString());
+		AddMovementInput(Direction, Val);
+	}
+	else{
+		const FVector Direction = Controller->GetControlRotation().Vector();
+		AddMovementInput(Direction, ForwardFlapForce);
+	}
 }
 
 void ABirdCharacter::OnRightFlap(float Val)
