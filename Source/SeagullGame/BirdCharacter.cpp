@@ -100,7 +100,13 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 	// Smoothly interpolate to target yaw speed
 	CurrentYawSpeed = FMath::FInterpTo(CurrentYawSpeed, 0.0f, GetWorld()->GetDeltaSeconds(), 2.0f);
 
-	ForwardFlapForce = FMath::FInterpTo(ForwardFlapForce, 0.0f, GetWorld()->GetDeltaSeconds(), 5.0f);
+//	ForwardFlapForce = FMath::FInterpTo(ForwardFlapForce, 0.0f, GetWorld()->GetDeltaSeconds(), 5.0f);
+	if (ForwardFlapForce > 0.0f){
+		ForwardFlapForce -= 0.005f;
+	}
+	else if (ForwardFlapForce < 0.0f){
+		ForwardFlapForce = 0.0f;
+	}
 
 	if (gliding){
 		const FVector Direction = Controller->GetControlRotation().Vector();
@@ -109,12 +115,10 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 		if (CharacterMovement->MovementMode != MOVE_Flying){
 			CharacterMovement->SetMovementMode(MOVE_Flying);
 		}
-		if (CharacterMovement->IsWalkable()){
-			CharacterMovement->SetMovementMode(MOVE_Walking);
-		}
+		
 	}
 
-	
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::SanitizeFloat(ForwardFlapForce));
 
 	// Call any parent class Tick implementation
 	Super::Tick(DeltaSeconds);
@@ -147,7 +151,7 @@ void ABirdCharacter::Flap(){
 	// Set a max limit on vertical velocity
 	if (GetVelocity().Z < 100.0f){
 		LaunchCharacter(LaunchForce, false, false);
-		ForwardFlapForce += 0.2f;
+		ForwardFlapForce += 0.5f;
 	}
 
 	gliding = true;
@@ -172,6 +176,7 @@ void ABirdCharacter::ThrustInput(float Val)
 	else{
 		const FVector Direction = Controller->GetControlRotation().Vector();
 		AddMovementInput(Direction, ForwardFlapForce);
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, "Flying Forward");
 	}
 }
 
