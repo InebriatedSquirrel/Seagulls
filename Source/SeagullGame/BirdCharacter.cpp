@@ -92,7 +92,7 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 	CurrentYawSpeed = FMath::FInterpTo(CurrentYawSpeed, 0.0f, GetWorld()->GetDeltaSeconds(), 2.0f);
 
 	if (LatFlapForce >= 0.0f ){
-		LatFlapForce -= GlideDragAmount * Controller->GetControlRotation().Vector().Z;
+		LatFlapForce -= (GlideDragAmount/2) * Controller->GetControlRotation().Vector().Z;
 	}
 	if (LatFlapForce >= 0.0f && !ForwardPressed){
 		LatFlapForce = 0.0f;
@@ -119,6 +119,7 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 	}
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, CharacterMovement->GetMovementName());
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::SanitizeFloat(LatFlapForce));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::SanitizeFloat(CharacterMovement->MaxAcceleration));
 	
 	// Call any parent class Tick implementation
 	Super::Tick(DeltaSeconds);
@@ -130,6 +131,10 @@ void ABirdCharacter::ReceiveHit(class UPrimitiveComponent* MyComp, class AActor*
 	// If the bird touches an object with the ground tag, mark the player as walking
 	if (Other->ActorHasTag("Ground")){
 		CharacterMovement->SetMovementMode(MOVE_Walking);
+	}
+	else{
+		CharacterMovement->SetMovementMode(MOVE_Falling);
+		LatFlapForce = 0.0f;
 	}
 }
 
@@ -162,11 +167,13 @@ void ABirdCharacter::Flap(){
 	}
 	if (GlidingUnlocked){
 		Gliding = true;
+		CharacterMovement->MaxAcceleration = 1024.0f;
 	}
 }
 void ABirdCharacter::StopGlide(){
 	Gliding = false;
 	CharacterMovement->SetMovementMode(MOVE_Falling);
+	CharacterMovement->MaxAcceleration = 512.0f;
 }
 void ABirdCharacter::ThrustInput(float Val)
 {
