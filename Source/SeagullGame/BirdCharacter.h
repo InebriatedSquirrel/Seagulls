@@ -56,6 +56,14 @@ public:
 		// The drag imparted against LatFlapForce when gliding - also increases dive speed
 		float GlideDragAmount;
 
+	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadWrite)
+		// the max speed when flapping or gliding
+		float GlideMaxSpeed;
+
+	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadWrite)
+		// The max speed when not flapping or gliding
+		float FallingMaxSpeed;
+
 	UPROPERTY(Category = Bird, BlueprintReadOnly)
 		// Is the player currently gliding
 		bool Gliding;

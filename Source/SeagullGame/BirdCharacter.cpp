@@ -36,11 +36,13 @@ ABirdCharacter::ABirdCharacter(const class FPostConstructInitializeProperties& P
 	TurnSpeed = 50.f;
 	Gliding = false;
 	GlidingUnlocked = true;
-	FlyingGravityStrength = 0.2f;
-	MaxVerticalFlapVelocity = 500.0f;
-	VertFlapStrength = 350.0f;
+	FlyingGravityStrength = 0.1f;
+	MaxVerticalFlapVelocity = 1000.0f;
+	VertFlapStrength = 500.0f;
 	MaxGlideForce = 10.0f;
 	GlideDragAmount = 0.1f;
+	GlideMaxSpeed = 1024.0f;
+	FallingMaxSpeed = 512.0f;
 }
 
 // Frame loop
@@ -91,34 +93,48 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 	// Smoothly interpolate to target yaw speed
 	CurrentYawSpeed = FMath::FInterpTo(CurrentYawSpeed, 0.0f, GetWorld()->GetDeltaSeconds(), 2.0f);
 
+	// If we have forward momentum to use, decide how it should be altered
 	if (LatFlapForce >= 0.0f ){
-		LatFlapForce -= (GlideDragAmount/2) * Controller->GetControlRotation().Vector().Z;
+		// Make sure we don't divide by zero
+		if (GlideDragAmount <= 0.0f){
+			GlideDragAmount = 0.000001f;
+		}
+		// If looking upwards, decrease speed
+		if (Controller->GetControlRotation().Vector().Z > 0.0f){
+			LatFlapForce -= (GlideDragAmount / 3) * Controller->GetControlRotation().Vector().Z;
+		}
+		// If looking downwards, increase speed
+		if (Controller->GetControlRotation().Vector().Z < 0.0f){
+			LatFlapForce -= (GlideDragAmount / 2) * Controller->GetControlRotation().Vector().Z;
+		}
 	}
-	if (LatFlapForce >= 0.0f && !ForwardPressed){
+	// If we still have force but aren't trying to move forward, or are walking, set force to zero
+	if (LatFlapForce >= 0.0f && !ForwardPressed || LatFlapForce < 0.0f || CharacterMovement->MovementMode == MOVE_Walking){
 		LatFlapForce = 0.0f;
 	}
-	if (LatFlapForce < 0.0f || CharacterMovement->MovementMode == MOVE_Walking){
-		LatFlapForce = 0.0f;
-	}
+	// Set a max force that we can't exceed
 	else if (LatFlapForce > MaxGlideForce){
 		LatFlapForce = MaxGlideForce;
 	}
+	// If forward input is pressed, move the player in the direction they're facing
 	if (ForwardPressed){
 		const FVector Direction = Controller->GetControlRotation().Vector();
 		AddMovementInput(Direction, LatFlapForce);
 	}
-
+	// If gliding, impart fake gravity
 	if (Gliding){
 		const FVector Direction = Controller->GetControlRotation().Vector();
-		
+
 		AddMovementInput(FVector(0.0f, 0.0f, -1.0f), FlyingGravityStrength);
+		//Make sure the movement mode is correct
 		if (CharacterMovement->MovementMode != MOVE_Flying){
 			CharacterMovement->SetMovementMode(MOVE_Flying);
 		}
 		
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, CharacterMovement->GetMovementName());
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::SanitizeFloat(LatFlapForce));
+	/** Various Debugs */
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, CharacterMovement->GetMovementName());
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::SanitizeFloat(LatFlapForce));
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::SanitizeFloat(CharacterMovement->MaxAcceleration));
 	
 	// Call any parent class Tick implementation
@@ -132,6 +148,7 @@ void ABirdCharacter::ReceiveHit(class UPrimitiveComponent* MyComp, class AActor*
 	if (Other->ActorHasTag("Ground")){
 		CharacterMovement->SetMovementMode(MOVE_Walking);
 	}
+	// If the bird hits something that isn't the ground, make it fall
 	else{
 		CharacterMovement->SetMovementMode(MOVE_Falling);
 		LatFlapForce = 0.0f;
@@ -165,15 +182,17 @@ void ABirdCharacter::Flap(){
 			LatFlapForce += 0.5f;
 		}
 	}
+	// If gliding is unlocked, toggle gliding and increase the Bir
 	if (GlidingUnlocked){
 		Gliding = true;
-		CharacterMovement->MaxAcceleration = 1024.0f;
+		CharacterMovement->MaxAcceleration = GlideMaxSpeed;
 	}
 }
+//If the glide input is let go, set the player to falling
 void ABirdCharacter::StopGlide(){
 	Gliding = false;
 	CharacterMovement->SetMovementMode(MOVE_Falling);
-	CharacterMovement->MaxAcceleration = 512.0f;
+	CharacterMovement->MaxAcceleration = FallingMaxSpeed;
 }
 void ABirdCharacter::ThrustInput(float Val)
 {
@@ -190,11 +209,28 @@ void ABirdCharacter::ThrustInput(float Val)
 	else{
 		ForwardPressed = false;
 	}
+
+	// If any input is being pressed and the bird is on the ground, make it walk
+	if (Val != 0.0f && CharacterMovement->IsMovingOnGround())
+	{
+		//Find out which way is forward
+		FRotator Rotation = Controller->GetControlRotation();
+
+		// Limit pitch and walk if bird is on ground
+		Rotation.Pitch = 0.0f;
+
+		//Add movement in forward direction
+		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::X);
+		AddMovementInput(Direction, Val);
+		
+	}
 }
+// Strafe the player left or right based on input
 void ABirdCharacter::Strafe(float Val){
 	const FVector LatDirection = FRotationMatrix(GetActorRotation()).GetScaledAxis(EAxis::Y);
 	AddMovementInput(LatDirection, (Val * LatFlapForce));
 }
+// Check for quick rotate input buttons
 void ABirdCharacter::OnRightFlap(float Val)
 {
 	if (Val == -0.5f)
