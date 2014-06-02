@@ -24,6 +24,7 @@
 *.suo
 *.sdf
 *.opensdf
+*.vcxproj.user
 
 # Xcode project files
 *.xcodeproj
