@@ -3,6 +3,8 @@ Seagulls (Working Title)
 
 Unreal Project for UCF Game Workshop Summer 2014
 
+Video Tutorial http://youtu.be/bUiIbug_BkE
+
 Things to Remember
 --------------
 * Always create a branch when working on a feature, never work from the master branch
