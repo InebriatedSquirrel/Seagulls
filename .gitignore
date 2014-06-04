@@ -35,3 +35,11 @@
 /Intermediate
 /Saved
 
+
+*.hmap
+
+*.dat
+
+*.dep
+
+Content/Maps/OverworldMaps/AndresMap.umap
