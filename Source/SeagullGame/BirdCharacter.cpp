@@ -145,11 +145,11 @@ void ABirdCharacter::ReceiveHit(class UPrimitiveComponent* MyComp, class AActor*
 {
 	Super::ReceiveHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
 	// If the bird touches an object with the ground tag, mark the player as walking
-	if (Other->ActorHasTag("Ground")){
+	if (Other != NULL && Other->ActorHasTag("Ground")){
 		CharacterMovement->SetMovementMode(MOVE_Walking);
 	}
 	// If the bird hits something that isn't the ground, make it fall
-	else{
+	else{ 
 		CharacterMovement->SetMovementMode(MOVE_Falling);
 		LatFlapForce = 0.0f;
 	}
