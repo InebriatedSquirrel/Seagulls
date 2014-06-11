@@ -165,27 +165,35 @@ void ABirdCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompo
 
 	InputComponent->BindAxis("Lateral", this, &ABirdCharacter::AddControllerYawInput);
 	InputComponent->BindAxis("Vertical", this, &ABirdCharacter::AddControllerPitchInput);
-	InputComponent->BindAction("Flap", IE_Pressed, this, &ABirdCharacter::Flap);
-	InputComponent->BindAction("Flap", IE_Released, this, &ABirdCharacter::StopGlide);
+	InputComponent->BindAxis("Flap", this, &ABirdCharacter::Flap);
 
 	InputComponent->BindAxis("RightWing", this, &ABirdCharacter::OnRightFlap);
 }
 
-void ABirdCharacter::Flap(){
-	// Launch the player upwards at a weak strength
-	const FVector LaunchForce = FVector(0.f, 0.f, VertFlapStrength);
-	const FVector Direction = Controller->GetControlRotation().Vector();
-	// Set a max limit on vertical velocity
-	if (GetVelocity().Z < MaxVerticalFlapVelocity){
-		LaunchCharacter(LaunchForce, false, false);
-		if (LatFlapForce < MaxGlideForce){
-			LatFlapForce += 0.5f;
+void ABirdCharacter::Flap(float Val){
+	if (Val > 0 && !Gliding && !UpPressed){
+		// Launch the player upwards at a weak strength
+		const FVector LaunchForce = FVector(0.f, 0.f, VertFlapStrength);
+		const FVector Direction = Controller->GetControlRotation().Vector();
+		// Set a max limit on vertical velocity
+		if (GetVelocity().Z < MaxVerticalFlapVelocity){
+			LaunchCharacter(LaunchForce, false, false);
+			if (LatFlapForce < MaxGlideForce){
+				LatFlapForce += 0.5f;
+			}
 		}
+		// If gliding is unlocked, toggle gliding and increase the Bird max speed
+		if (GlidingUnlocked){
+			Gliding = true;
+			CharacterMovement->MaxAcceleration = GlideMaxSpeed;
+		}
+		UpPressed = true;
 	}
-	// If gliding is unlocked, toggle gliding and increase the Bir
-	if (GlidingUnlocked){
-		Gliding = true;
-		CharacterMovement->MaxAcceleration = GlideMaxSpeed;
+	else if(UpPressed && Val == 0.0f){
+		if (Gliding){
+			StopGlide();
+		}
+		UpPressed = false;
 	}
 }
 //If the glide input is let go, set the player to falling
