@@ -88,7 +88,7 @@ protected:
 	void RotateBird(float Val);
 
 	// Called when the main flap button is pressed
-	void Flap();
+	void Flap(float Val);
 
 	// Function which stops gliding when glide button is released
 	void StopGlide();
@@ -113,6 +113,8 @@ private:
 	bool LeftFlapped;
 	// Were both wings just flapped
 	bool ForwardPressed;
+	// Was the glide button pressed
+	bool UpPressed;
 
 	/** Timers for wing flap spacing*/
 	// Cooldown for right wing
