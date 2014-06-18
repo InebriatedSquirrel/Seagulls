@@ -44,3 +44,15 @@
 *.dep
 
 Content/Maps/OverworldMaps/AndresMap.umap
+
+Content/Shapes/Shape_Cube_DM2.uasset
+
+Content/Maps/Prototype_Maps/DestructionGame.umap
+
+Content/Maps/Prototype_Maps/DestructionGame.umap
+
+Content/Blueprints/BirdCharacterBlueprint.uasset
+
+Content/Blueprints/InGameHUD.uasset
+
+Content/Blueprints/TrophyBlueprint.uasset
