@@ -1,7 +1,0 @@
-Begin Object Class=InstancedFoliageSettings Name="Model_Generictree_1_settings"
-   Density=12.029556
-   MeshBounds=(Origin=(X=8.219360,Y=-22.936935,Z=288.904694),BoxExtent=(X=219.469482,Y=212.457062,Z=289.579407),SphereRadius=342.294678)
-   LowBoundOriginRadius=(X=-9.853708,Y=-28.134554,Z=39.033985)
-   DisplayOrder=1
-   IsSelected=True
-End Object
