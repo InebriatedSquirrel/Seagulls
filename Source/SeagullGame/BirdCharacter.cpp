@@ -48,6 +48,7 @@ ABirdCharacter::ABirdCharacter(const class FPostConstructInitializeProperties& P
 // Frame loop
 void ABirdCharacter::Tick(float DeltaSeconds)
 {
+	/** 
 	// If both wings were pressed, thrust upwards and don't rotate
 	if (RightFlapped && LeftFlapped)
 	{
@@ -92,6 +93,8 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 
 	// Smoothly interpolate to target yaw speed
 	CurrentYawSpeed = FMath::FInterpTo(CurrentYawSpeed, 0.0f, GetWorld()->GetDeltaSeconds(), 2.0f);
+
+	*/
 
 	// If we have forward momentum to use, decide how it should be altered
 	if (LatFlapForce >= 0.0f ){
@@ -196,6 +199,33 @@ void ABirdCharacter::Flap(float Val){
 		UpPressed = false;
 	}
 }
+void ABirdCharacter::FlapForward(float Val){
+	if (Val > 0 && !Gliding && !UpPressed){
+		// Launch the player upwards at a weak strength
+		const FVector LaunchForce = FVector(0.f, 0.f, VertFlapStrength);
+		const FVector Direction = Controller->GetControlRotation().Vector();
+		// Set a max limit on vertical velocity
+		if (GetVelocity().Z < MaxVerticalFlapVelocity){
+			LaunchCharacter(LaunchForce, false, false);
+			if (LatFlapForce < MaxGlideForce){
+				LatFlapForce += 0.5f;
+			}
+		}
+		// If gliding is unlocked, toggle gliding and increase the Bird max speed
+		if (GlidingUnlocked){
+			Gliding = true;
+			CharacterMovement->MaxAcceleration = GlideMaxSpeed;
+		}
+		UpPressed = true;
+	}
+	else if (UpPressed && Val == 0.0f){
+		if (Gliding){
+			StopGlide();
+		}
+		UpPressed = false;
+	}
+}
+
 //If the glide input is let go, set the player to falling
 void ABirdCharacter::StopGlide(){
 	Gliding = false;
