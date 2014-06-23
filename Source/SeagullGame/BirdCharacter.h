@@ -27,14 +27,9 @@ public:
 	virtual void ReceiveHit(class UPrimitiveComponent* MyComp, class AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) OVERRIDE;
 	// End AActor overrides
 
-	
-	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadWrite)
-		// How fast the bird rotates
-		float TurnSpeed;
-
 	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadWrite)
 		// Upwards force when flapping
-		float VertFlapStrength;
+		float FlapStrength;
 
 	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadWrite)
 		// Maximum velocity when travelling upwards
@@ -78,51 +73,19 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) OVERRIDE; // Allows binding actions/axes to functions
 	// End APawn overrides
 
-	// Toggle forward movement
-	void ThrustInput(float Val);
-
-	// Event for Rotations
-	void OnRightFlap(float Val);
-
-	/// Rotates the bird around it's axis
-	void RotateBird(float Val);
-
 	// Called when the main flap button is pressed
 	void Flap(float Val);
+
+	void FlapForward(float Val);
 
 	// Function which stops gliding when glide button is released
 	void StopGlide();
 
-	// Strafes the player left or right when gliding
-	void Strafe(float Val);
-
 private:
 
-	// Current yaw speed 
-	float CurrentYawSpeed;
-
-	// Current pitch speed
-	float CurrentPitchSpeed;
-
-	// Current roll speed 
-	float CurrentRollSpeed;
-
-	// Was the right wing just flapped
-	bool RightFlapped;
-	// Was the right wing just flapped
-	bool LeftFlapped;
 	// Were both wings just flapped
 	bool ForwardPressed;
 	// Was the glide button pressed
 	bool UpPressed;
-
-	/** Timers for wing flap spacing*/
-	// Cooldown for right wing
-	float RightTimer;
-	// Cooldown for right wing
-	float LeftTimer;
-	// Cooldown for both wings
-	float BothTimer;
-
 	
 };
