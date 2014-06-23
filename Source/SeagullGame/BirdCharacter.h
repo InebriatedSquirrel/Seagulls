@@ -84,8 +84,8 @@ protected:
 	void ReleaseBrake();
 
 	// Independant camera controls
-	void RotateCameraX();
-	void RotateCameraY();
+	void RotateCameraX(float Val);
+	void RotateCameraY(float Val);
 
 	// Function which stops gliding when glide button is released
 	void StopGlide();
@@ -99,5 +99,9 @@ private:
 
 	//Is the player currently braking
 	bool Braking;
+
+	float RotateTimer;
+
+	bool Rotating;
 	
 };

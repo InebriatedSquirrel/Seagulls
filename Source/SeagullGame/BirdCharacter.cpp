@@ -95,6 +95,10 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::SanitizeFloat(LatFlapForce));
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::SanitizeFloat(CharacterMovement->MaxAcceleration));
 	
+	if (Rotating && RotateTimer > 0.0f){
+		RotateTimer -= DeltaSeconds;
+	}
+
 	// Call any parent class Tick implementation
 	Super::Tick(DeltaSeconds);
 }
@@ -121,6 +125,9 @@ void ABirdCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompo
 	InputComponent->BindAxis("Vertical", this, &ABirdCharacter::AddControllerPitchInput);
 	InputComponent->BindAxis("FlapUpward", this, &ABirdCharacter::Flap);
 	InputComponent->BindAxis("FlapForward", this, &ABirdCharacter::FlapForward);
+
+	InputComponent->BindAxis("CameraX", this, &ABirdCharacter::RotateCameraX);
+	InputComponent->BindAxis("CameraY", this, &ABirdCharacter::RotateCameraY);
 
 	InputComponent->BindAction("Brake", IE_Pressed, this, &ABirdCharacter::Brake);
 	InputComponent->BindAction("Brake", IE_Released, this, &ABirdCharacter::ReleaseBrake);
@@ -201,6 +208,20 @@ void ABirdCharacter::StopGlide(){
 	Gliding = false;
 	CharacterMovement->SetMovementMode(MOVE_Falling);
 	CharacterMovement->MaxAcceleration = FallingMaxSpeed;
+}
+
+void ABirdCharacter::RotateCameraX(float Val){
+	if (Val != 0.0f){
+		SpringArm->AddLocalRotation(FRotator(0.f, Val, 0.0f));
+		Rotating = true;
+	}
+}
+
+void ABirdCharacter::RotateCameraY(float Val){
+	if (Val != 0.0f){
+		SpringArm->AddLocalRotation(FRotator(Val, 0.0f, 0.0f));
+		Rotating = true;
+	}
 }
 
 void ABirdCharacter::Brake(){
