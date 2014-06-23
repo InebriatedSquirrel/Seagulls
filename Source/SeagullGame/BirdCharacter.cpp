@@ -53,6 +53,10 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 		if (GlideDragAmount <= 0.0f){
 			GlideDragAmount = 0.000001f;
 		}
+		//If braking is toggled, slow down no matter what
+		if (Braking){
+			LatFlapForce -= (GlideDragAmount * 2);
+		}
 		// If looking upwards, decrease speed
 		if (Controller->GetControlRotation().Vector().Z > 0.0f){
 			LatFlapForce -= (GlideDragAmount / 4) * Controller->GetControlRotation().Vector().Z;
@@ -118,6 +122,8 @@ void ABirdCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompo
 	InputComponent->BindAxis("FlapUpward", this, &ABirdCharacter::Flap);
 	InputComponent->BindAxis("FlapForward", this, &ABirdCharacter::FlapForward);
 
+	InputComponent->BindAction("Brake", IE_Pressed, this, &ABirdCharacter::Brake);
+	InputComponent->BindAction("Brake", IE_Released, this, &ABirdCharacter::ReleaseBrake);
 }
 
 void ABirdCharacter::Flap(float Val){
@@ -188,9 +194,6 @@ void ABirdCharacter::FlapForward(float Val){
 		}
 		ForwardPressed = false;
 	}
-
-
-	
 }
 
 //If the glide input is let go, set the player to falling
@@ -200,3 +203,10 @@ void ABirdCharacter::StopGlide(){
 	CharacterMovement->MaxAcceleration = FallingMaxSpeed;
 }
 
+void ABirdCharacter::Brake(){
+	Braking = true;
+}
+
+void ABirdCharacter::ReleaseBrake(){
+	Braking = false;
+}

@@ -73,10 +73,19 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) OVERRIDE; // Allows binding actions/axes to functions
 	// End APawn overrides
 
-	// Called when the main flap button is pressed
+	// Called when the main flap button is pressed or held
 	void Flap(float Val);
 
+	// Called when the flap forward button is pressed or held
 	void FlapForward(float Val);
+
+	// Toggles a bool which controls braking
+	void Brake();
+	void ReleaseBrake();
+
+	// Independant camera controls
+	void RotateCameraX();
+	void RotateCameraY();
 
 	// Function which stops gliding when glide button is released
 	void StopGlide();
@@ -87,5 +96,8 @@ private:
 	bool ForwardPressed;
 	// Was the glide button pressed
 	bool UpPressed;
+
+	//Is the player currently braking
+	bool Braking;
 	
 };
