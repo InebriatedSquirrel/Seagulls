@@ -38,7 +38,8 @@ ABirdCharacter::ABirdCharacter(const class FPostConstructInitializeProperties& P
 	FlyingGravityStrength = 0.1f;
 	MaxVerticalFlapVelocity = 1000.0f;
 	FlapStrength = 500.0f;
-	MaxGlideForce = 100.0f;
+	MaxGlideFactor = 100.0f;
+	MaxDiveFactor = 300.0f;
 	GlideDragAmount = 0.1f;
 	GlideMaxSpeed = 4136.0f;
 	FallingMaxSpeed = 1024.0f;
@@ -61,11 +62,11 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 		}
 		// If looking upwards, decrease speed
 		if (Controller->GetControlRotation().Vector().Z > 0.0f){
-			LatFlapForce -= (GlideDragAmount / 4) * Controller->GetControlRotation().Vector().Z;
+			LatFlapForce -= (GlideDragAmount / 4.0f) * Controller->GetControlRotation().Vector().Z;
 		}
 		// If looking downwards, increase speed
 		if (Controller->GetControlRotation().Vector().Z < 0.0f){
-			LatFlapForce -= (GlideDragAmount * 20) * Controller->GetControlRotation().Vector().Z;
+			LatFlapForce -= (GlideDragAmount * 20.0f) * Controller->GetControlRotation().Vector().Z;
 		}
 	}
 	// If we still have force but aren't trying to move forward, or are walking, set force to zero
@@ -73,8 +74,8 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 		LatFlapForce = 0.0f;
 	}
 	// Set a max force that we can't exceed
-	else if (LatFlapForce > MaxGlideForce){
-		LatFlapForce = MaxGlideForce;
+	else if (LatFlapForce > MaxDiveFactor){
+		LatFlapForce = MaxDiveFactor;
 	}
 	// If forward input is pressed, move the player in the direction they're facing
 	if (ForwardPressed){
@@ -160,7 +161,7 @@ void ABirdCharacter::Flap(float Val){
 		// Set a max limit on vertical velocity
 		if (GetVelocity().Z < MaxVerticalFlapVelocity){
 			LaunchCharacter(LaunchForce, false, false);
-/*			if (LatFlapForce < MaxGlideForce){
+/*			if (LatFlapForce < MaxGlideFactor){
 				LatFlapForce += 0.5f;
 			}*/
 		}
@@ -172,7 +173,7 @@ void ABirdCharacter::Flap(float Val){
 		UpPressed = true;
 	}
 	else if(UpPressed && Val == 0.0f){
-		if (Gliding  && ForwardPressed == false){
+		if (Gliding && ForwardPressed == false){
 			StopGlide();
 		}
 		UpPressed = false;
@@ -202,7 +203,7 @@ void ABirdCharacter::FlapForward(float Val){
 		// Set a max limit on vertical velocity
 		//	if (GetVelocity().Z < MaxVerticalFlapVelocity){
 		LaunchCharacter(LaunchForce, false, false);
-		if (LatFlapForce < MaxGlideForce){
+		if (LatFlapForce < MaxGlideFactor){
 			LatFlapForce += 1.0f;
 		}
 		//	}
