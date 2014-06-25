@@ -40,8 +40,8 @@ ABirdCharacter::ABirdCharacter(const class FPostConstructInitializeProperties& P
 	FlapStrength = 500.0f;
 	MaxGlideForce = 100.0f;
 	GlideDragAmount = 0.1f;
-	GlideMaxSpeed = 2048.0f;
-	FallingMaxSpeed = 512.0f;
+	GlideMaxSpeed = 4136.0f;
+	FallingMaxSpeed = 1024.0f;
 	RotateTimer = 3.0f;
 	CameraResetSpeed = 3.0f;
 }
@@ -60,13 +60,13 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 			LatFlapForce -= (GlideDragAmount * 2);
 		}
 		// If looking upwards, decrease speed
-/*		if (Controller->GetControlRotation().Vector().Z > 0.0f){
+		if (Controller->GetControlRotation().Vector().Z > 0.0f){
 			LatFlapForce -= (GlideDragAmount / 4) * Controller->GetControlRotation().Vector().Z;
 		}
 		// If looking downwards, increase speed
 		if (Controller->GetControlRotation().Vector().Z < 0.0f){
-			LatFlapForce -= (GlideDragAmount * 2) * Controller->GetControlRotation().Vector().Z;
-		}*/
+			LatFlapForce -= (GlideDragAmount * 20) * Controller->GetControlRotation().Vector().Z;
+		}
 	}
 	// If we still have force but aren't trying to move forward, or are walking, set force to zero
 	if (LatFlapForce >= 0.0f && !ForwardPressed || LatFlapForce < 0.0f || CharacterMovement->MovementMode == MOVE_Walking){
