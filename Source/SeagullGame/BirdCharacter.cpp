@@ -21,7 +21,7 @@ ABirdCharacter::ABirdCharacter(const class FPostConstructInitializeProperties& P
 	SpringArm->TargetArmLength = 160.0f; // The camera follows at this distance behind the character	
 	SpringArm->SocketOffset = FVector(0.f, 0.f, 60.f);
 	SpringArm->bEnableCameraLag = false;
-	SpringArm->CameraLagSpeed = 15.f;
+	SpringArm->CameraLagSpeed = 30.0f;
 
 	// Further mesh axis correction
 	SpringArm->AddLocalRotation(FRotator(0.f, 90.0f, 0.0f));
@@ -38,10 +38,12 @@ ABirdCharacter::ABirdCharacter(const class FPostConstructInitializeProperties& P
 	FlyingGravityStrength = 0.1f;
 	MaxVerticalFlapVelocity = 1000.0f;
 	FlapStrength = 500.0f;
-	MaxGlideForce = 10.0f;
+	MaxGlideForce = 100.0f;
 	GlideDragAmount = 0.1f;
-	GlideMaxSpeed = 1024.0f;
+	GlideMaxSpeed = 2048.0f;
 	FallingMaxSpeed = 512.0f;
+	RotateTimer = 3.0f;
+	CameraResetSpeed = 3.0f;
 }
 
 // Frame loop
@@ -58,13 +60,13 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 			LatFlapForce -= (GlideDragAmount * 2);
 		}
 		// If looking upwards, decrease speed
-		if (Controller->GetControlRotation().Vector().Z > 0.0f){
+/*		if (Controller->GetControlRotation().Vector().Z > 0.0f){
 			LatFlapForce -= (GlideDragAmount / 4) * Controller->GetControlRotation().Vector().Z;
 		}
 		// If looking downwards, increase speed
 		if (Controller->GetControlRotation().Vector().Z < 0.0f){
 			LatFlapForce -= (GlideDragAmount * 2) * Controller->GetControlRotation().Vector().Z;
-		}
+		}*/
 	}
 	// If we still have force but aren't trying to move forward, or are walking, set force to zero
 	if (LatFlapForce >= 0.0f && !ForwardPressed || LatFlapForce < 0.0f || CharacterMovement->MovementMode == MOVE_Walking){
@@ -81,8 +83,6 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 	}
 	// If gliding, impart fake gravity
 	if (Gliding){
-		const FVector Direction = Controller->GetControlRotation().Vector();
-
 		AddMovementInput(FVector(0.0f, 0.0f, -1.0f), FlyingGravityStrength);
 		//Make sure the movement mode is correct
 		if (CharacterMovement->MovementMode != MOVE_Flying){
@@ -97,6 +97,25 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 	
 	if (Rotating && RotateTimer > 0.0f){
 		RotateTimer -= DeltaSeconds;
+		CameraResetting = false;
+	}
+	else if (RotateTimer <= 0.0f && Rotating){
+		RotateTimer = 3.0f;
+		Rotating = false;
+		CameraResetTimer = CameraResetSpeed + 1.0f;
+		CameraResetting = true;
+	}
+
+	if (CameraResetting){
+		if (SpringArm->RelativeRotation != FRotator(0.f, 90.0f, 0.f)){
+			tempRotation = FMath::RInterpTo(SpringArm->RelativeRotation, FRotator(0.f, 90.0f, 0.f), DeltaSeconds, CameraResetSpeed);
+			SpringArm->SetRelativeRotation(tempRotation);
+			CameraResetTimer -= DeltaSeconds;
+		}
+		if(CameraResetTimer <= 0.0f){
+			CameraResetting = false;
+			CameraResetTimer = 0.0f;
+		}
 	}
 
 	// Call any parent class Tick implementation
@@ -184,7 +203,7 @@ void ABirdCharacter::FlapForward(float Val){
 		//	if (GetVelocity().Z < MaxVerticalFlapVelocity){
 		LaunchCharacter(LaunchForce, false, false);
 		if (LatFlapForce < MaxGlideForce){
-			LatFlapForce += 0.5f;
+			LatFlapForce += 1.0f;
 		}
 		//	}
 
@@ -214,6 +233,7 @@ void ABirdCharacter::RotateCameraX(float Val){
 	if (Val != 0.0f){
 		SpringArm->AddLocalRotation(FRotator(0.f, Val, 0.0f));
 		Rotating = true;
+		RotateTimer = 3.0f;
 	}
 }
 
@@ -221,6 +241,7 @@ void ABirdCharacter::RotateCameraY(float Val){
 	if (Val != 0.0f){
 		SpringArm->AddLocalRotation(FRotator(Val, 0.0f, 0.0f));
 		Rotating = true;
+		RotateTimer = 3.0f;
 	}
 }
 

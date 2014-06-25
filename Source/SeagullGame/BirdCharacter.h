@@ -63,9 +63,13 @@ public:
 		// Is the player currently gliding
 		bool Gliding;
 
-	UPROPERTY(Category = Bird, BlueprintReadOnly)
+	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadWrite)
 		// The force that flapping adds to forward/sideways movement
 		float LatFlapForce;
+
+	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadOnly)
+		// The speed which the camera rotation resets
+		float CameraResetSpeed;
 
 protected:
 
@@ -97,11 +101,21 @@ private:
 	// Was the glide button pressed
 	bool UpPressed;
 
-	//Is the player currently braking
+	// Is the player currently braking
 	bool Braking;
 
+	// Timer which counts down when the player lets go of the camera rotation input
 	float RotateTimer;
 
+	// Timer which counts down when the camera is moving back to it's original location
+	float CameraResetTimer;
+
+	// Temporary rotation which is interpolated
+	FRotator tempRotation;
+
+	// Is the camera currently trying to reset itself
+	bool CameraResetting;
+	// Is the player moving the camera
 	bool Rotating;
 	
 };
