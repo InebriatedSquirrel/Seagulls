@@ -111,6 +111,15 @@ private:
 	// Timer which counts down when the player lets go of the camera rotation input
 	float RotateTimer;
 
+	// Timer which counts down after a flap and toggles gliding
+	float GlideTimer;
+
+	// Toggles glide timer on
+	bool GlideTimerActive;
+
+	// Toggles hover
+	bool Hover;
+
 	// Timer which counts down when the camera is moving back to it's original location
 	float CameraResetTimer;
 

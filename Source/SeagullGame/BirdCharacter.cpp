@@ -43,13 +43,25 @@ ABirdCharacter::ABirdCharacter(const class FPostConstructInitializeProperties& P
 	GlideDragAmount = 0.1f;
 	GlideMaxSpeed = 4136.0f;
 	FallingMaxSpeed = 1024.0f;
-	RotateTimer = 3.0f;
+	RotateTimer = 1.0f;
 	CameraResetSpeed = 3.0f;
+	GlideTimer = 1.0f;
+	GlideTimerActive = false;
 }
 
 // Frame loop
 void ABirdCharacter::Tick(float DeltaSeconds)
 {
+
+	if (GlideTimerActive == true){
+		GlideTimer -= DeltaSeconds;
+		if (GlideTimer <= 0.0f){
+			Gliding = true;
+			GlideTimer = 1.0f;
+			GlideTimerActive = false;
+		}
+	}
+
 	// If we have forward momentum to use, decide how it should be altered
 	if (LatFlapForce >= 0.0f ){
 		// Make sure we don't divide by zero
@@ -61,11 +73,11 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 			LatFlapForce -= (GlideDragAmount * 2);
 		}
 		// If looking upwards, decrease speed
-		if (Controller->GetControlRotation().Vector().Z > 0.0f){
+		if (Controller->GetControlRotation().Vector().Z > 0.0f && Gliding){
 			LatFlapForce -= (GlideDragAmount / 4.0f) * Controller->GetControlRotation().Vector().Z;
 		}
 		// If looking downwards, increase speed
-		if (Controller->GetControlRotation().Vector().Z < 0.0f){
+		if (Controller->GetControlRotation().Vector().Z < 0.0f && Gliding){
 			LatFlapForce -= (GlideDragAmount * 20.0f) * Controller->GetControlRotation().Vector().Z;
 		}
 	}
@@ -83,7 +95,7 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 		AddMovementInput(Direction, LatFlapForce);
 	}
 	// If gliding, impart fake gravity
-	if (Gliding){
+	if (Gliding || Hover){
 		AddMovementInput(FVector(0.0f, 0.0f, -1.0f), FlyingGravityStrength);
 		//Make sure the movement mode is correct
 		if (CharacterMovement->MovementMode != MOVE_Flying){
@@ -93,9 +105,10 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 	}
 	/** Various Debugs */
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, CharacterMovement->GetMovementName());
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::SanitizeFloat(LatFlapForce));
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::SanitizeFloat(LatFlapForce));
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::SanitizeFloat(CharacterMovement->MaxAcceleration));
-	
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, CharacterMovement->GetCurrentAcceleration().ToString());
+
 	if (Rotating && RotateTimer > 0.0f){
 		RotateTimer -= DeltaSeconds;
 		CameraResetting = false;
@@ -166,15 +179,15 @@ void ABirdCharacter::Flap(float Val){
 			}*/
 		}
 		// If gliding is unlocked, toggle gliding and increase the Bird max speed
-		if (GlidingUnlocked && !Gliding){
-			Gliding = true;
-			CharacterMovement->MaxAcceleration = GlideMaxSpeed;
+		if (GlidingUnlocked && !Hover){
+			Hover = true;
+			//CharacterMovement->MaxAcceleration = GlideMaxSpeed;
 		}
 		UpPressed = true;
 	}
 	else if(UpPressed && Val == 0.0f){
-		if (Gliding && ForwardPressed == false){
-			StopGlide();
+		if (Hover){
+			Hover = false;
 		}
 		UpPressed = false;
 	}
@@ -211,7 +224,7 @@ void ABirdCharacter::FlapForward(float Val){
 		// If gliding is unlocked, toggle gliding and increase the Bird max speed
 		if (GlidingUnlocked && !Gliding){
 			Gliding = true;
-			CharacterMovement->MaxAcceleration = GlideMaxSpeed;
+		//	CharacterMovement->MaxAcceleration = GlideMaxSpeed;
 		}
 		ForwardPressed = true;
 	}
