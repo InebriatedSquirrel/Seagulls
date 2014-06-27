@@ -27,14 +27,9 @@ public:
 	virtual void ReceiveHit(class UPrimitiveComponent* MyComp, class AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) OVERRIDE;
 	// End AActor overrides
 
-	
-	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadWrite)
-		// How fast the bird rotates
-		float TurnSpeed;
-
 	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadWrite)
 		// Upwards force when flapping
-		float VertFlapStrength;
+		float FlapStrength;
 
 	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadWrite)
 		// Maximum velocity when travelling upwards
@@ -49,8 +44,12 @@ public:
 		float FlyingGravityStrength;
 
 	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadWrite)
-		// The max force when gliding - influenced by LatFlapForce and GlideDragAmount
-		float MaxGlideForce;
+		// The max speed when gliding - influenced by LatFlapForce and GlideDragAmount
+		float MaxGlideFactor;
+
+	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadWrite)
+		// The max speed when diving - influenced by LatFlapForce and GlideDragAmount
+		float MaxDiveFactor;
 
 	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadWrite)
 		// The drag imparted against LatFlapForce when gliding - also increases dive speed
@@ -68,9 +67,13 @@ public:
 		// Is the player currently gliding
 		bool Gliding;
 
-	UPROPERTY(Category = Bird, BlueprintReadOnly)
+	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadWrite)
 		// The force that flapping adds to forward/sideways movement
 		float LatFlapForce;
+
+	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadOnly)
+		// The speed which the camera rotation resets
+		float CameraResetSpeed;
 
 protected:
 
@@ -78,51 +81,54 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) OVERRIDE; // Allows binding actions/axes to functions
 	// End APawn overrides
 
-	// Toggle forward movement
-	void ThrustInput(float Val);
-
-	// Event for Rotations
-	void OnRightFlap(float Val);
-
-	/// Rotates the bird around it's axis
-	void RotateBird(float Val);
-
-	// Called when the main flap button is pressed
+	// Called when the main flap button is pressed or held
 	void Flap(float Val);
+
+	// Called when the flap forward button is pressed or held
+	void FlapForward(float Val);
+
+	// Toggles a bool which controls braking
+	void Brake();
+	void ReleaseBrake();
+
+	// Independant camera controls
+	void RotateCameraX(float Val);
+	void RotateCameraY(float Val);
 
 	// Function which stops gliding when glide button is released
 	void StopGlide();
 
-	// Strafes the player left or right when gliding
-	void Strafe(float Val);
-
 private:
 
-	// Current yaw speed 
-	float CurrentYawSpeed;
-
-	// Current pitch speed
-	float CurrentPitchSpeed;
-
-	// Current roll speed 
-	float CurrentRollSpeed;
-
-	// Was the right wing just flapped
-	bool RightFlapped;
-	// Was the right wing just flapped
-	bool LeftFlapped;
 	// Were both wings just flapped
 	bool ForwardPressed;
 	// Was the glide button pressed
 	bool UpPressed;
 
-	/** Timers for wing flap spacing*/
-	// Cooldown for right wing
-	float RightTimer;
-	// Cooldown for right wing
-	float LeftTimer;
-	// Cooldown for both wings
-	float BothTimer;
+	// Is the player currently braking
+	bool Braking;
 
+	// Timer which counts down when the player lets go of the camera rotation input
+	float RotateTimer;
+
+	// Timer which counts down after a flap and toggles gliding
+	float GlideTimer;
+
+	// Toggles glide timer on
+	bool GlideTimerActive;
+
+	// Toggles hover
+	bool Hover;
+
+	// Timer which counts down when the camera is moving back to it's original location
+	float CameraResetTimer;
+
+	// Temporary rotation which is interpolated
+	FRotator tempRotation;
+
+	// Is the camera currently trying to reset itself
+	bool CameraResetting;
+	// Is the player moving the camera
+	bool Rotating;
 	
 };
