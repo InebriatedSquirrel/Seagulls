@@ -44,11 +44,11 @@ public:
 		float FlyingGravityStrength;
 
 	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadWrite)
-		// The max speed when gliding - influenced by LatFlapForce and GlideDragAmount
+		// The max speed when gliding, bigger amounts mean sustained speed when pulling up
 		float MaxGlideFactor;
 
 	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadWrite)
-		// The max speed when diving - influenced by LatFlapForce and GlideDragAmount
+		// The acceleration when diving, bigger amounts mean sustained speed when pulling up
 		float MaxDiveFactor;
 
 	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadWrite)

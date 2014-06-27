@@ -39,14 +39,21 @@ ABirdCharacter::ABirdCharacter(const class FPostConstructInitializeProperties& P
 	MaxVerticalFlapVelocity = 1000.0f;
 	FlapStrength = 1000.0f;
 	MaxGlideFactor = 0.5f;
-	MaxDiveFactor = 3.0f;
+	MaxDiveFactor = 4.0f;
 	GlideDragAmount = 0.1f;
 	GlideMaxSpeed = 4136.0f;
 	FallingMaxSpeed = 512.0f;
 	RotateTimer = 1.0f;
-	CameraResetSpeed = 3.0f;
-	GlideTimer = 1.0f;
+	CameraResetSpeed = 2.0f;
+	GlideTimer = 0.25f;
 	GlideTimerActive = false;
+
+	// Setting Default Values
+	CharacterMovement->MaxFlySpeed = GlideMaxSpeed;
+	CharacterMovement->MaxWalkSpeed = FallingMaxSpeed;
+	CharacterMovement->AirControl = 0.5f;
+	CharacterMovement->BrakingDecelerationFlying = 1024.0f;
+	CharacterMovement->BrakingDecelerationFalling = 1200.0f;
 }
 
 // Frame loop
@@ -60,7 +67,6 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 			GlideTimer = 1.0f;
 			GlideTimerActive = false;
 		//	CharacterMovement->MaxAcceleration = GlideMaxSpeed;
-			CharacterMovement->MaxFlySpeed = GlideMaxSpeed;
 		}
 	}
 
@@ -72,27 +78,30 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 		}
 		//If braking is toggled, slow down no matter what
 		if (Braking){
-			LatFlapForce -= (GlideDragAmount * 2);
+			LatFlapForce -= (GlideDragAmount * 2.0f);
 		}
 		// If looking upwards, decrease speed
 		if (Controller->GetControlRotation().Vector().Z > 0.0f && Gliding){
-			LatFlapForce -= (GlideDragAmount / 4.0f) * Controller->GetControlRotation().Vector().Z;
+			LatFlapForce -= (GlideDragAmount / 2.0f) * Controller->GetControlRotation().Vector().Z;
 		}
 		// If looking downwards, increase speed
 		if (Controller->GetControlRotation().Vector().Z < 0.0f && Gliding){
-			LatFlapForce -= (GlideDragAmount * 200.0f) * Controller->GetControlRotation().Vector().Z;
+			LatFlapForce -= (GlideDragAmount) * Controller->GetControlRotation().Vector().Z;
 		}
 	}
 	// If we still have force but aren't trying to move forward, or are walking, set force to zero
 	if (/*LatFlapForce >= 0.0f && !ForwardPressed ||*/ LatFlapForce < 0.0f || CharacterMovement->MovementMode == MOVE_Walking){
 		LatFlapForce = 0.0f;
 	}
+	else if (CharacterMovement->MovementMode == MOVE_Walking && LatFlapForce >= MaxGlideFactor){
+		LatFlapForce = MaxGlideFactor;
+	}
 	// Set a max force that we can't exceed
 	else if (LatFlapForce > MaxDiveFactor){
 		LatFlapForce = MaxDiveFactor;
 	}
 	// If forward input is pressed, move the player in the direction they're facing
-	if (ForwardPressed){
+	if (ForwardPressed && Gliding){
 		const FVector Direction = Controller->GetControlRotation().Vector();
 		AddMovementInput(Direction, LatFlapForce);
 	}
@@ -106,32 +115,39 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 		
 	}
 	/** Various Debugs */
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, CharacterMovement->GetMovementName());
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::SanitizeFloat(LatFlapForce));
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::SanitizeFloat(CharacterMovement->MaxAcceleration));
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, "Fly Speed: " + FString::SanitizeFloat(CharacterMovement->MaxFlySpeed));
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Fall Speed: " + FString::SanitizeFloat(CharacterMovement->MaxWalkSpeed));
-
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, CharacterMovement->GetMovementName());
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::SanitizeFloat(LatFlapForce));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, "Max Speed: " + FString::SanitizeFloat(CharacterMovement->GetMaxSpeed()));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Fall Speed: " + FString::SanitizeFloat(CharacterMovement->MaxWalkSpeed));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Velocity: " + FString::SanitizeFloat(CharacterMovement->Velocity.Size()));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, "Velocity2D: " + FString::SanitizeFloat(CharacterMovement->Velocity.Size2D()));
+	
+	// If already rotating, and there is time on the clock, decrease it
 	if (Rotating && RotateTimer > 0.0f){
 		RotateTimer -= DeltaSeconds;
 		CameraResetting = false;
 	}
+	// If the rotate should happen, reset values and toggle it
 	else if (RotateTimer <= 0.0f && Rotating){
-		RotateTimer = 3.0f;
+		RotateTimer = 1.0f;
 		Rotating = false;
-		CameraResetTimer = CameraResetSpeed + 1.0f;
+		// Give the ease extra time
+		CameraResetTimer = CameraResetSpeed * 2.5f;
 		CameraResetting = true;
 	}
 
+	// If the camera needs to be moved back, interpolate it over a period of time
 	if (CameraResetting){
 		if (SpringArm->RelativeRotation != FRotator(0.f, 90.0f, 0.f)){
 			tempRotation = FMath::RInterpTo(SpringArm->RelativeRotation, FRotator(0.f, 90.0f, 0.f), DeltaSeconds, CameraResetSpeed);
 			SpringArm->SetRelativeRotation(tempRotation);
 			CameraResetTimer -= DeltaSeconds;
 		}
+		// After interpolation, ensure that the rotation is snapped into place
 		if(CameraResetTimer <= 0.0f){
 			CameraResetting = false;
 			CameraResetTimer = 0.0f;
+			SpringArm->SetRelativeRotation(FRotator(0.f, 90.0f, 0.0f));
 		}
 	}
 
@@ -214,14 +230,18 @@ void ABirdCharacter::FlapForward(float Val){
 		// Launch the player upwards at a weak strength
 		const FVector LaunchForce = GetActorForwardVector() * FlapStrength;
 		const FVector Direction = Controller->GetControlRotation().Vector();
-		// Set a max limit on vertical velocity
-		//	if (GetVelocity().Z < MaxVerticalFlapVelocity){
-		
-		if (LatFlapForce < MaxGlideFactor){
-			LatFlapForce += 1.0f;
+
+		LatFlapForce += 1.0f;
+		if (CharacterMovement->Velocity.Size2D() < FallingMaxSpeed){
 			LaunchCharacter(LaunchForce, false, false);
 		}
-		//	}
+		else{
+			LaunchCharacter(LaunchForce/2.0f, false, false);
+		}
+		if (CharacterMovement->Velocity.Z < 0.0f && Controller->GetControlRotation().Vector().Z > 0.2f){
+			LaunchCharacter(GetActorUpVector() * FlapStrength/2.0f, false, false);
+		}
+
 
 		// If gliding is unlocked, toggle gliding and increase the Bird max speed
 		if (GlidingUnlocked && !Gliding){
@@ -230,13 +250,12 @@ void ABirdCharacter::FlapForward(float Val){
 		}
 		ForwardPressed = true;
 	}
+	// If the button was let go...
 	else if (ForwardPressed && Val <= 0){
 		if (Gliding){
 			StopGlide();
 		}
-		else{
-			GlideTimerActive = false;
-		}
+		GlideTimerActive = false;
 		ForwardPressed = false;
 	}
 }
@@ -245,23 +264,23 @@ void ABirdCharacter::FlapForward(float Val){
 void ABirdCharacter::StopGlide(){
 	Gliding = false;
 	CharacterMovement->SetMovementMode(MOVE_Falling);
+	LatFlapForce = 0.0f;
 	//CharacterMovement->MaxAcceleration = FallingMaxSpeed;
-	CharacterMovement->MaxFlySpeed = FallingMaxSpeed;
 }
 
 void ABirdCharacter::RotateCameraX(float Val){
 	if (Val != 0.0f){
-		SpringArm->AddLocalRotation(FRotator(0.f, Val, 0.0f));
+		SpringArm->AddLocalRotation(FRotator(0.f, (Val * 2.0), 0.0f));
 		Rotating = true;
-		RotateTimer = 3.0f;
+		RotateTimer = 1.0f;
 	}
 }
 
 void ABirdCharacter::RotateCameraY(float Val){
 	if (Val != 0.0f){
-		SpringArm->AddLocalRotation(FRotator(Val, 0.0f, 0.0f));
+		SpringArm->AddLocalRotation(FRotator((Val * 2.0), 0.0f, 0.0f));
 		Rotating = true;
-		RotateTimer = 3.0f;
+		RotateTimer = 1.0f;
 	}
 }
 
