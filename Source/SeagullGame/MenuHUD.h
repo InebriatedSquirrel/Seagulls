@@ -12,6 +12,7 @@ UCLASS()
 class AMenuHUD : public AHUD
 {
 	GENERATED_UCLASS_BODY()
-	
-	
+
+protected:
+	void AMenuHUD::ReceiveDrawHUD(int SizeX, int SizeY);
 };

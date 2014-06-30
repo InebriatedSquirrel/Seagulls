@@ -10,8 +10,9 @@ AMenuHUD::AMenuHUD(const class FPostConstructInitializeProperties& PCIP)
 	
 }
 
-void ReceiveDrawHUD(int32 SizeX, int32 SizeY){
-
+void AMenuHUD::ReceiveDrawHUD(int32 SizeX, int32 SizeY)
+{
+	DrawRect(FLinearColor::Black, 100.f, 100.f, 50.f, 50.f);
 }
 
 
