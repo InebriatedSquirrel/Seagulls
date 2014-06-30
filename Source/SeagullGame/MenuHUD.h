@@ -12,7 +12,6 @@ UCLASS()
 class AMenuHUD : public AHUD
 {
 	GENERATED_UCLASS_BODY()
-
 	
 	
 };
