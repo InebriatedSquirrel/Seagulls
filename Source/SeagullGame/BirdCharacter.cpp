@@ -45,8 +45,9 @@ ABirdCharacter::ABirdCharacter(const class FPostConstructInitializeProperties& P
 	FallingMaxSpeed = 512.0f;
 	RotateTimer = 1.0f;
 	CameraResetSpeed = 2.0f;
-	GlideTimer = 0.25f;
 	GlideTimerActive = false;
+	GlideDelay = 0.14f;
+	GlideTimer = GlideDelay;
 
 	// Setting Default Values
 	CharacterMovement->MaxFlySpeed = GlideMaxSpeed;
@@ -64,7 +65,7 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 		GlideTimer -= DeltaSeconds;
 		if (GlideTimer <= 0.0f){
 			Gliding = true;
-			GlideTimer = 1.0f;
+			GlideTimer = GlideDelay;
 			GlideTimerActive = false;
 		//	CharacterMovement->MaxAcceleration = GlideMaxSpeed;
 		}
@@ -116,7 +117,7 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 	}
 	/** Various Debugs */
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, CharacterMovement->GetMovementName());
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::SanitizeFloat(LatFlapForce));
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::SanitizeFloat(LatFlapForce));
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, "Max Speed: " + FString::SanitizeFloat(CharacterMovement->GetMaxSpeed()));
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Fall Speed: " + FString::SanitizeFloat(CharacterMovement->MaxWalkSpeed));
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Velocity: " + FString::SanitizeFloat(CharacterMovement->Velocity.Size()));
@@ -180,6 +181,9 @@ void ABirdCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompo
 
 	InputComponent->BindAxis("CameraX", this, &ABirdCharacter::RotateCameraX);
 	InputComponent->BindAxis("CameraY", this, &ABirdCharacter::RotateCameraY);
+
+	InputComponent->BindAxis("MouseCameraX", this, &ABirdCharacter::MouseRotateCameraX);
+	InputComponent->BindAxis("MouseCameraY", this, &ABirdCharacter::MouseRotateCameraY);
 
 	InputComponent->BindAction("Brake", IE_Pressed, this, &ABirdCharacter::Brake);
 	InputComponent->BindAction("Brake", IE_Released, this, &ABirdCharacter::ReleaseBrake);
@@ -278,6 +282,22 @@ void ABirdCharacter::RotateCameraX(float Val){
 
 void ABirdCharacter::RotateCameraY(float Val){
 	if (Val != 0.0f){
+		SpringArm->AddLocalRotation(FRotator((Val * 2.0), 0.0f, 0.0f));
+		Rotating = true;
+		RotateTimer = 1.0f;
+	}
+}
+
+void ABirdCharacter::MouseRotateCameraX(float Val){
+	if (Val != 0.0f && MouseCameraActive){
+		SpringArm->AddLocalRotation(FRotator(0.f, (Val * 2.0), 0.0f));
+		Rotating = true;
+		RotateTimer = 1.0f;
+	}
+}
+
+void ABirdCharacter::MouseRotateCameraY(float Val){
+	if (Val != 0.0f && MouseCameraActive){
 		SpringArm->AddLocalRotation(FRotator((Val * 2.0), 0.0f, 0.0f));
 		Rotating = true;
 		RotateTimer = 1.0f;
