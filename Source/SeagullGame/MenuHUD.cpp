@@ -17,6 +17,6 @@ void AMenuHUD::ReceiveDrawHUD(int32 SizeX, int32 SizeY)
 
 void AMenuHUD::PostInitializeComponents()
 {
-	//Super::PostInitializeComponents();
+	Super::PostInitializeComponents();
 }
 
