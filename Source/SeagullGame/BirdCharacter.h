@@ -75,6 +75,10 @@ public:
 		// The speed which the camera rotation resets
 		float CameraResetSpeed;
 
+	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadWrite)
+		// The length of the glide timer
+		float GlideDelay;
+
 protected:
 
 	// Begin APawn overrides
@@ -95,6 +99,10 @@ protected:
 	void RotateCameraX(float Val);
 	void RotateCameraY(float Val);
 
+	void MouseRotateCameraY(float Val);
+	void MouseRotateCameraX(float Val);
+
+
 	// Function which stops gliding when glide button is released
 	void StopGlide();
 
@@ -111,9 +119,6 @@ private:
 	// Timer which counts down when the player lets go of the camera rotation input
 	float RotateTimer;
 
-	// Timer which counts down after a flap and toggles gliding
-	float GlideTimer;
-
 	// Toggles glide timer on
 	bool GlideTimerActive;
 
@@ -126,6 +131,12 @@ private:
 	// Temporary rotation which is interpolated
 	FRotator tempRotation;
 
+	// Is the player using the mouse for camera controls
+	bool MouseCameraActive;
+
+	// Timer which counts down after a flap and toggles gliding
+	float GlideTimer;
+	
 	// Is the camera currently trying to reset itself
 	bool CameraResetting;
 	// Is the player moving the camera
