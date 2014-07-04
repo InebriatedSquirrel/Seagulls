@@ -117,7 +117,7 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 	}
 	/** Various Debugs */
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, CharacterMovement->GetMovementName());
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::SanitizeFloat(LatFlapForce));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::SanitizeFloat(LatFlapForce));
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, "Max Speed: " + FString::SanitizeFloat(CharacterMovement->GetMaxSpeed()));
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Fall Speed: " + FString::SanitizeFloat(CharacterMovement->MaxWalkSpeed));
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Velocity: " + FString::SanitizeFloat(CharacterMovement->Velocity.Size()));
