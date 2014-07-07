@@ -29,4 +29,4 @@ class FSeagullGameModule : public FDefaultGameModuleImpl
 	}
 };
 
-IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, SeagullGame, "SeagullGame" );
+IMPLEMENT_PRIMARY_GAME_MODULE( FSeagullGameModule, SeagullGame, "SeagullGame" );

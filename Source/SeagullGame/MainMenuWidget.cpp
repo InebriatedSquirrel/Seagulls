@@ -9,7 +9,7 @@ void SMainMenuWidget::Construct(const FArguments& args)
 {
     MenuHUD = args._MenuHUD;
 
-	MenuStyle = &FMenuStyles::Get().GetWidgetStyle<FGlobalStyle>("Global");
+	MenuStyle = &FMenuStyles::Get().GetWidgetStyle<FGlobalStyle>("GlobalMenuStyle");
 
     ChildSlot
         [
@@ -18,25 +18,39 @@ void SMainMenuWidget::Construct(const FArguments& args)
                 .HAlign(HAlign_Center)
                 .VAlign(VAlign_Top)
                 [
-                    SNew(STextBlock)
-                        .ColorAndOpacity(FLinearColor::White)
-                        .ShadowColorAndOpacity(FLinearColor::Black)
-                        .ShadowOffset(FIntPoint(-1, 1))
-                        .Font(FSlateFontInfo("Arial", 26))
-                        .Text(FText::FromString("Main Menu"))
+					SNew(SImage)
+					.Image(&MenuStyle->LogoBrush)
                 ]
             + SOverlay::Slot()
                 .HAlign(HAlign_Center)
                 .VAlign(VAlign_Center)
                 [
                     SNew(SVerticalBox)
-                    + SVerticalBox::Slot()
+					+ SVerticalBox::Slot().Padding(10.0f)
                         [
                             SNew(SButton)
-                                .Text(FText::FromString("Play Game!"))
-                                .OnClicked(this, &SMainMenuWidget::PlayGameClicked)
+                                .Text(FText::FromString("Single Player"))
+                                .OnClicked(this, &SMainMenuWidget::SinglePlayerClicked)
                         ]
-                    + SVerticalBox::Slot()
+					+ SVerticalBox::Slot().Padding(10.0f)
+						[
+							SNew(SButton)
+							.Text(FText::FromString("Multi Player"))
+							.OnClicked(this, &SMainMenuWidget::MultiPlayerClicked)
+						]
+					+ SVerticalBox::Slot().Padding(10.0f)
+						[
+							SNew(SButton)
+							.Text(FText::FromString("Options"))
+							.OnClicked(this, &SMainMenuWidget::OptionsClicked)
+						]
+					+ SVerticalBox::Slot().Padding(10.0f)
+						[
+							SNew(SButton)
+							.Text(FText::FromString("Credits"))
+							.OnClicked(this, &SMainMenuWidget::CreditsClicked)
+						]
+					+ SVerticalBox::Slot().Padding(10.0f)
                         [
                             SNew(SButton)
                                 .Text(FText::FromString("Quit Game"))
@@ -46,12 +60,30 @@ void SMainMenuWidget::Construct(const FArguments& args)
         ];
 }
  
-FReply SMainMenuWidget::PlayGameClicked()
+FReply SMainMenuWidget::SinglePlayerClicked()
 {
-    MenuHUD->PlayGameClicked();
+    MenuHUD->SinglePlayerClicked();
     return FReply::Handled();
 }
- 
+
+FReply SMainMenuWidget::MultiPlayerClicked()
+{
+	MenuHUD->MultiPlayerClicked();
+	return FReply::Handled();
+}
+
+FReply SMainMenuWidget::OptionsClicked()
+{
+	MenuHUD->OptionsClicked();
+	return FReply::Handled();
+}
+
+FReply SMainMenuWidget::CreditsClicked()
+{
+	MenuHUD->CreditsClicked();
+	return FReply::Handled();
+}
+
 FReply SMainMenuWidget::QuitGameClicked()
 {
     MenuHUD->QuitGameClicked();

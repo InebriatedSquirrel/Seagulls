@@ -26,8 +26,13 @@ private:
 
 	const struct FGlobalStyle* MenuStyle;
 
-     //Click handler for the Play Game! button - Calls MenuHUD's PlayGameClicked() event.
-    FReply PlayGameClicked();
+	FReply SinglePlayerClicked();
+
+	FReply MultiPlayerClicked();
+
+	FReply OptionsClicked();
+
+	FReply CreditsClicked();
  
     //Click handler for the Quit Game button - Calls MenuHUD's QuitGameClicked() event.
     FReply QuitGameClicked();
