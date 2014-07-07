@@ -32,5 +32,5 @@ private:
 	/**
 	* Reference to the Main Menu Slate UI.
 	**/
-	TSharedPtr<class SMainMenuUI> MainMenuUI; 
+	TSharedPtr<class SMainMenuWidget> MainMenuWidget; 
 };
