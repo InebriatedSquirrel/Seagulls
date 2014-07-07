@@ -16,9 +16,18 @@ class AMenuHUD : public AHUD
 public:
 
 	virtual void PostInitializeComponents() OVERRIDE;
-	
+
 	UFUNCTION(BlueprintImplementableEvent, Category = "Menus|Main Menu")
-	void PlayGameClicked();
+	void SinglePlayerClicked();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Menus|Main Menu")
+	void MultiPlayerClicked();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Menus|Main Menu")
+	void OptionsClicked();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Menus|Main Menu")
+	void CreditsClicked();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Menus|Main Menu")
 	void QuitGameClicked();
@@ -32,5 +41,5 @@ private:
 	/**
 	* Reference to the Main Menu Slate UI.
 	**/
-	TSharedPtr<class SMainMenuUI> MainMenuUI; 
+	TSharedPtr<class SMainMenuWidget> MainMenuWidget; 
 };

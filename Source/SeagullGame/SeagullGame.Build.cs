@@ -12,7 +12,8 @@ public class SeagullGame : ModuleRules
 
 		// Uncomment if you are using Slate UI
 	    PrivateDependencyModuleNames.Add("Slate");
-		
+        PrivateDependencyModuleNames.Add("SlateCore");
+        
 		// Uncomment if you are using online features
 		PrivateDependencyModuleNames.Add("OnlineSubsystem");
 		if ((Target.Platform == UnrealTargetPlatform.Win32) || (Target.Platform == UnrealTargetPlatform.Win64))
