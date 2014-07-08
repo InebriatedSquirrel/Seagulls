@@ -56,6 +56,13 @@ struct FGlobalStyle : public FSlateWidgetStyle
 	UPROPERTY(EditAnywhere, Category = Appearance)
 		FSlateBrush LogoBrush;
 		FGlobalStyle& SetLogoBrush(const FSlateBrush& InLogoBrush) { LogoBrush = InLogoBrush; return *this; }
+
+	/**
+	* The brush used to draw the credits screen
+	*/
+	UPROPERTY(EditAnywhere, Category = Appearance)
+		FSlateBrush CreditsBrush;
+		FGlobalStyle& SetCreditsBrush(const FSlateBrush& InCreditsBrush) { CreditsBrush = InCreditsBrush; return *this; }
 };
  
 /**

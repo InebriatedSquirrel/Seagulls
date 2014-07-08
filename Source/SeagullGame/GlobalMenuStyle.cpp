@@ -5,6 +5,7 @@
 void FGlobalStyle::GetResources(TArray<const FSlateBrush*>& OutBrushes) const
 {
 	OutBrushes.Add(&LogoBrush);
+	OutBrushes.Add(&CreditsBrush);
 }
  
 const FName FGlobalStyle::TypeName = TEXT("FGlobalStyle");

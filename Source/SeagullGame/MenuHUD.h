@@ -32,14 +32,26 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Menus|Main Menu")
 	void QuitGameClicked();
 
+	UFUNCTION(BlueprintCallable, Category = "Menus|General")
+	void ExitMenu();
 
-protected:
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Menus|General")
+	FString CurrentMenu;
 
-	//void AMenuHUD::ReceiveDrawHUD(int SizeX, int SizeY);
+
+	// Functions for opening new widgets
+	void OpenOptionsMenu();
+
+	void OpenCredits();
+
+//protected:
+
 
 private:
 	/**
 	* Reference to the Main Menu Slate UI.
 	**/
 	TSharedPtr<class SMainMenuWidget> MainMenuWidget; 
+
+	TSharedPtr<class SCreditsWidget> CreditsWidget;
 };
