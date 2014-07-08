@@ -3,9 +3,9 @@
 #include "Slate.h"
  
 
-class SMainMenuWidget : public SCompoundWidget
+class SCreditsWidget : public SCompoundWidget
 {
-    SLATE_BEGIN_ARGS(SMainMenuWidget)
+    SLATE_BEGIN_ARGS(SCreditsWidget)
         : _MenuHUD()
     {
     }
@@ -32,6 +32,7 @@ private:
 
 	FReply CreditsClicked();
  
+    //Click handler for the Quit Game button - Calls MenuHUD's QuitGameClicked() event.
     FReply QuitGameClicked();
  
     //Stores a weak reference to the HUD controlling this class.

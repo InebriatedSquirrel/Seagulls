@@ -74,13 +74,17 @@ FReply SMainMenuWidget::MultiPlayerClicked()
 
 FReply SMainMenuWidget::OptionsClicked()
 {
+	MenuHUD->OpenOptionsMenu();
 	MenuHUD->OptionsClicked();
+
 	return FReply::Handled();
 }
 
 FReply SMainMenuWidget::CreditsClicked()
 {
 	MenuHUD->CreditsClicked();
+	MenuHUD->OpenCredits();
+
 	return FReply::Handled();
 }
 
