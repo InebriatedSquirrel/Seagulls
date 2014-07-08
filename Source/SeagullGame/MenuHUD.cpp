@@ -11,10 +11,10 @@ AMenuHUD::AMenuHUD(const class FPostConstructInitializeProperties& PCIP)
 	
 }
 
-void AMenuHUD::ReceiveDrawHUD(int32 SizeX, int32 SizeY)
+/*void AMenuHUD::ReceiveDrawHUD(int32 SizeX, int32 SizeY)
 {
 	
-}
+}*/
 
 void AMenuHUD::PostInitializeComponents()
 {

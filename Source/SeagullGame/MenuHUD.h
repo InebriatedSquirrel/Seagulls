@@ -35,7 +35,7 @@ public:
 
 protected:
 
-	void AMenuHUD::ReceiveDrawHUD(int SizeX, int SizeY);
+	//void AMenuHUD::ReceiveDrawHUD(int SizeX, int SizeY);
 
 private:
 	/**
