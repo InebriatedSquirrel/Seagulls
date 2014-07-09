@@ -1,7 +1,7 @@
 
 
 #include "SeagullGame.h"
-#include "MenuStyles.h"
+#include "SeagullGame/UI/MenuStyles.h"
 
 #include "SeagullGame.generated.inl"
 
