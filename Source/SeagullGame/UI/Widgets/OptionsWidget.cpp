@@ -22,24 +22,34 @@ void SOptionsWidget::Construct(const FArguments& args)
 					+ SVerticalBox::Slot().Padding(10.0f)
 					[
 						SNew(SButton)
-						.Text(FText::FromString("Graphics"))
-						.OnClicked(this, &SOptionsWidget::GraphicsClicked)
+							.HAlign(HAlign_Center)
+							.VAlign(VAlign_Center)
+							.Text(FText::FromString("Graphics"))
+							.OnClicked(this, &SOptionsWidget::GraphicsClicked)
 					]
 					+ SVerticalBox::Slot().Padding(10.0f)
 					[
 						SNew(SButton)
-						.Text(FText::FromString("Controls"))
-						.OnClicked(this, &SOptionsWidget::GraphicsClicked)
+							.HAlign(HAlign_Center)
+							.VAlign(VAlign_Center)
+							.Text(FText::FromString("Controls"))
+							.OnClicked(this, &SOptionsWidget::ControlsClicked)
 					]
+					+ SVerticalBox::Slot().Padding(10.0f)
 					[
 						SNew(SButton)
-						.Text(FText::FromString("Audio"))
-						.OnClicked(this, &SOptionsWidget::GraphicsClicked)
+							.HAlign(HAlign_Center)
+							.VAlign(VAlign_Center)
+							.Text(FText::FromString("Audio"))
+							.OnClicked(this, &SOptionsWidget::AudioClicked)
 					]
+					+ SVerticalBox::Slot().Padding(10.0f)
 					[
 						SNew(SButton)
-						.Text(FText::FromString("Back"))
-						.OnClicked(this, &SOptionsWidget::BackClicked)
+							.HAlign(HAlign_Center)
+							.VAlign(VAlign_Center)
+							.Text(FText::FromString("Back"))
+							.OnClicked(this, &SOptionsWidget::BackClicked)
 					]
                 ]
         ];
@@ -48,6 +58,20 @@ void SOptionsWidget::Construct(const FArguments& args)
 FReply SOptionsWidget::GraphicsClicked()
 {
 	MenuHUD->GraphicsClicked();
+
+	return FReply::Handled();
+}
+
+FReply SOptionsWidget::ControlsClicked()
+{
+	MenuHUD->ControlsClicked();
+
+	return FReply::Handled();
+}
+
+FReply SOptionsWidget::AudioClicked()
+{
+	MenuHUD->AudioClicked();
 
 	return FReply::Handled();
 }

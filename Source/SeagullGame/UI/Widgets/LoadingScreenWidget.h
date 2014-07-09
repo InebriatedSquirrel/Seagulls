@@ -3,9 +3,9 @@
 #include "Slate.h"
  
 
-class SOptionsWidget : public SCompoundWidget
+class SLoadingScreenWidget : public SCompoundWidget
 {
-    SLATE_BEGIN_ARGS(SOptionsWidget)
+    SLATE_BEGIN_ARGS(SLoadingScreenWidget)
         : _MenuHUD()
     {
     }
@@ -23,14 +23,6 @@ public:
 private:
 
 	const struct FGlobalStyle* MenuStyle;
-
-	FReply GraphicsClicked();
-
-	FReply ControlsClicked();
-
-	FReply AudioClicked();
-
-	FReply BackClicked();
  
     //Stores a weak reference to the HUD controlling this class.
     TWeakObjectPtr<class AMenuHUD> MenuHUD;
