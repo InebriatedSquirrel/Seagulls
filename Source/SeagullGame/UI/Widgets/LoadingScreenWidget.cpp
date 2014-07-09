@@ -1,11 +1,11 @@
-#include "SeagullGame.h"
+#include "SeagullGame/SeagullGame.h"
  
-#include "MenuHUD.h"
-#include "CreditsWidget.h"
-#include "GlobalMenuStyle.h"
-#include "MenuStyles.h"
+#include "SeagullGame/UI/MenuHUD.h"
+#include "LoadingScreenWidget.h"
+#include "SeagullGame/UI/GlobalMenuStyle.h"
+#include "SeagullGame/UI/MenuStyles.h"
  
-void SCreditsWidget::Construct(const FArguments& args)
+void SLoadingScreenWidget::Construct(const FArguments& args)
 {
     MenuHUD = args._MenuHUD;
 
@@ -19,7 +19,7 @@ void SCreditsWidget::Construct(const FArguments& args)
                 .VAlign(VAlign_Top)
                 [
 					SNew(SImage)
-					.Image(&MenuStyle->CreditsBrush)
+					.Image(&MenuStyle->LoadingScreenBrush)
                 ]
         ];
 }

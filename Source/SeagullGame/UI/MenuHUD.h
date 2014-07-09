@@ -17,6 +17,7 @@ public:
 
 	virtual void PostInitializeComponents() OVERRIDE;
 
+	// Main Menu Buttons
 	UFUNCTION(BlueprintImplementableEvent, Category = "Menus|Main Menu")
 	void SinglePlayerClicked();
 
@@ -32,17 +33,31 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Menus|Main Menu")
 	void QuitGameClicked();
 
+	// Options Buttons
+	UFUNCTION(BlueprintImplementableEvent, Category = "Menus|Options")
+	void GraphicsClicked();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Menus|Options")
+	void ControlsClicked();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Menus|Options")
+	void AudioClicked();
+
+	// General buttons/functions
 	UFUNCTION(BlueprintCallable, Category = "Menus|General")
 	void ExitMenu();
+
+	UFUNCTION(BlueprintCallable, Category = "Menus|General")
+	void OpenLoadingScreen();
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Menus|General")
 	FString CurrentMenu;
 
 
-	// Functions for opening new widgets
+	// Functions for opening new widgets/menus
 	void OpenOptionsMenu();
-
 	void OpenCredits();
+	
 
 //protected:
 
@@ -54,4 +69,8 @@ private:
 	TSharedPtr<class SMainMenuWidget> MainMenuWidget; 
 
 	TSharedPtr<class SCreditsWidget> CreditsWidget;
+
+	TSharedPtr<class SOptionsWidget> OptionsWidget;
+
+	TSharedPtr<class SLoadingScreenWidget> LoadingScreenWidget;
 };

@@ -23,17 +23,6 @@ public:
 private:
 
 	const struct FGlobalStyle* MenuStyle;
-
-	FReply SinglePlayerClicked();
-
-	FReply MultiPlayerClicked();
-
-	FReply OptionsClicked();
-
-	FReply CreditsClicked();
- 
-    //Click handler for the Quit Game button - Calls MenuHUD's QuitGameClicked() event.
-    FReply QuitGameClicked();
  
     //Stores a weak reference to the HUD controlling this class.
     TWeakObjectPtr<class AMenuHUD> MenuHUD;

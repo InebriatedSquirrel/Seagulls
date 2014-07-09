@@ -63,6 +63,13 @@ struct FGlobalStyle : public FSlateWidgetStyle
 	UPROPERTY(EditAnywhere, Category = Appearance)
 		FSlateBrush CreditsBrush;
 		FGlobalStyle& SetCreditsBrush(const FSlateBrush& InCreditsBrush) { CreditsBrush = InCreditsBrush; return *this; }
+
+	/**
+	* The brush used to draw the loading screen
+	*/
+	UPROPERTY(EditAnywhere, Category = Appearance)
+		FSlateBrush LoadingScreenBrush;
+		FGlobalStyle& SetLoadingScreenBrush(const FSlateBrush& InLoadingScreenBrush) { LoadingScreenBrush = InLoadingScreenBrush; return *this; }
 };
  
 /**

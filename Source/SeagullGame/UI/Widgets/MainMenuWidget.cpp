@@ -1,9 +1,9 @@
-#include "SeagullGame.h"
+#include "SeagullGame/SeagullGame.h"
  
-#include "MenuHUD.h"
+#include "SeagullGame/UI/MenuHUD.h"
 #include "MainMenuWidget.h"
-#include "GlobalMenuStyle.h"
-#include "MenuStyles.h"
+#include "SeagullGame/UI/GlobalMenuStyle.h"
+#include "SeagullGame/UI/MenuStyles.h"
  
 void SMainMenuWidget::Construct(const FArguments& args)
 {
@@ -29,32 +29,42 @@ void SMainMenuWidget::Construct(const FArguments& args)
 					+ SVerticalBox::Slot().Padding(10.0f)
                         [
                             SNew(SButton)
+								.HAlign(HAlign_Center)
+								.VAlign(VAlign_Center)
                                 .Text(FText::FromString("Single Player"))
                                 .OnClicked(this, &SMainMenuWidget::SinglePlayerClicked)
                         ]
 					+ SVerticalBox::Slot().Padding(10.0f)
 						[
 							SNew(SButton)
-							.Text(FText::FromString("Multi Player"))
-							.OnClicked(this, &SMainMenuWidget::MultiPlayerClicked)
+								.HAlign(HAlign_Center)
+								.VAlign(VAlign_Center)
+								.Text(FText::FromString("Multi Player"))
+								.OnClicked(this, &SMainMenuWidget::MultiPlayerClicked)
 						]
 					+ SVerticalBox::Slot().Padding(10.0f)
 						[
 							SNew(SButton)
-							.Text(FText::FromString("Options"))
-							.OnClicked(this, &SMainMenuWidget::OptionsClicked)
+								.HAlign(HAlign_Center)
+								.VAlign(VAlign_Center)
+								.Text(FText::FromString("Options"))
+								.OnClicked(this, &SMainMenuWidget::OptionsClicked)
 						]
 					+ SVerticalBox::Slot().Padding(10.0f)
 						[
 							SNew(SButton)
-							.Text(FText::FromString("Credits"))
-							.OnClicked(this, &SMainMenuWidget::CreditsClicked)
+								.HAlign(HAlign_Center)
+								.VAlign(VAlign_Center)
+								.Text(FText::FromString("Credits"))
+								.OnClicked(this, &SMainMenuWidget::CreditsClicked)
 						]
 					+ SVerticalBox::Slot().Padding(10.0f)
                         [
                             SNew(SButton)
-                                .Text(FText::FromString("Quit Game"))
-                                .OnClicked(this, &SMainMenuWidget::QuitGameClicked)
+								.HAlign(HAlign_Center)
+								.VAlign(VAlign_Center)
+								.Text(FText::FromString("Quit Game"))
+								.OnClicked(this, &SMainMenuWidget::QuitGameClicked)
                         ]
                 ]
         ];
@@ -62,12 +72,14 @@ void SMainMenuWidget::Construct(const FArguments& args)
  
 FReply SMainMenuWidget::SinglePlayerClicked()
 {
+	//MenuHUD->OpenLoadingScreen();
     MenuHUD->SinglePlayerClicked();
     return FReply::Handled();
 }
 
 FReply SMainMenuWidget::MultiPlayerClicked()
 {
+	//MenuHUD->OpenLoadingScreen();
 	MenuHUD->MultiPlayerClicked();
 	return FReply::Handled();
 }
