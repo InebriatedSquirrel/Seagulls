@@ -1,6 +1,6 @@
 #include "SeagullGame/SeagullGame.h"
  
-#include "MenuStyles.h"
+#include "SeagullGame/UI/MenuStyles.h"
 #include "Slate.h"
 #include "SlateGameResources.h"
  
