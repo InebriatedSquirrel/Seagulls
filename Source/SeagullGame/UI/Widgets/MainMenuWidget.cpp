@@ -1,9 +1,9 @@
-#include "SeagullGame.h"
+#include "SeagullGame/SeagullGame.h"
  
-#include "MenuHUD.h"
+#include "SeagullGame/UI/MenuHUD.h"
 #include "MainMenuWidget.h"
-#include "GlobalMenuStyle.h"
-#include "MenuStyles.h"
+#include "SeagullGame/UI/GlobalMenuStyle.h"
+#include "SeagullGame/UI/MenuStyles.h"
  
 void SMainMenuWidget::Construct(const FArguments& args)
 {

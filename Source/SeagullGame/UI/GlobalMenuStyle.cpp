@@ -1,4 +1,4 @@
-#include "SeagullGame.h"
+#include "SeagullGame/SeagullGame.h"
  
 #include "GlobalMenuStyle.h"
  

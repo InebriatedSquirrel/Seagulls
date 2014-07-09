@@ -1,9 +1,10 @@
 
 
-#include "SeagullGame.h"
+#include "SeagullGame/SeagullGame.h"
 #include "MenuHUD.h"
-#include "MainMenuWidget.h"
-#include "CreditsWidget.h"
+#include "SeagullGame/UI/Widgets/MainMenuWidget.h"
+#include "SeagullGame/UI/Widgets/CreditsWidget.h"
+#include "SeagullGame/UI/Widgets/OptionsWidget.h"
 
 AMenuHUD::AMenuHUD(const class FPostConstructInitializeProperties& PCIP)
 	: Super(PCIP)
@@ -34,6 +35,19 @@ void AMenuHUD::PostInitializeComponents()
 void AMenuHUD::OpenOptionsMenu()
 {
 	GEngine->GameViewport->RemoveAllViewportWidgets();
+
+	// Make sure the engine and viewport are valid
+	if (GEngine && GEngine->GameViewport)
+	{
+		UGameViewportClient* Viewport = GEngine->GameViewport;
+
+		SAssignNew(OptionsWidget, SOptionsWidget)
+			.MenuHUD(TWeakObjectPtr<AMenuHUD>(this));
+
+		Viewport->AddViewportWidgetContent(
+			SNew(SWeakWidget).PossiblyNullContent(OptionsWidget.ToSharedRef())
+			);
+	}
 
 	CurrentMenu = "Options";
 }
