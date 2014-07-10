@@ -6,6 +6,7 @@
 #include "SeagullGame/UI/Widgets/CreditsWidget.h"
 #include "SeagullGame/UI/Widgets/OptionsWidget.h"
 #include "SeagullGame/UI/Widgets/LoadingScreenWidget.h"
+#include "SeagullGame/UI/Widgets/GraphicsWidget.h"
 
 AMenuHUD::AMenuHUD(const class FPostConstructInitializeProperties& PCIP)
 	: Super(PCIP)
@@ -72,9 +73,50 @@ void AMenuHUD::OpenCredits()
 	CurrentMenu = "Credits";
 }
 
+void AMenuHUD::OpenGraphicsMenu()
+{
+	GEngine->GameViewport->RemoveAllViewportWidgets();
+
+	// Make sure the engine and viewport are valid
+	if (GEngine && GEngine->GameViewport)
+	{
+		UGameViewportClient* Viewport = GEngine->GameViewport;
+
+		SAssignNew(GraphicsWidget, SGraphicsWidget)
+			.MenuHUD(TWeakObjectPtr<AMenuHUD>(this));
+
+		Viewport->AddViewportWidgetContent(
+			SNew(SWeakWidget).PossiblyNullContent(GraphicsWidget.ToSharedRef())
+			);
+	}
+	CurrentMenu = "Graphics";
+}
+
 void AMenuHUD::ExitMenu()
 {
-	if (CurrentMenu != "MainMenu")
+	// If currently in the Graphics menu, return to options
+	if (CurrentMenu == "Graphics")
+	{
+		GEngine->GameViewport->RemoveAllViewportWidgets();
+
+		// Make sure the engine and viewport are valid
+		if (GEngine && GEngine->GameViewport)
+		{
+			UGameViewportClient* Viewport = GEngine->GameViewport;
+
+			SAssignNew(OptionsWidget, SOptionsWidget)
+				.MenuHUD(TWeakObjectPtr<AMenuHUD>(this));
+
+			Viewport->AddViewportWidgetContent(
+				SNew(SWeakWidget).PossiblyNullContent(OptionsWidget.ToSharedRef())
+				);
+		}
+
+		CurrentMenu = "Options";
+	}
+
+	// If on any other menu, return to the main menu
+	else if (CurrentMenu != "MainMenu")
 	{
 		GEngine->GameViewport->RemoveAllViewportWidgets();
 

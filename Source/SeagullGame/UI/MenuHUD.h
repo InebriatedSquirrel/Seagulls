@@ -56,6 +56,7 @@ public:
 
 	// Functions for opening new widgets/menus
 	void OpenOptionsMenu();
+	void OpenGraphicsMenu();
 	void OpenCredits();
 	
 
@@ -71,6 +72,8 @@ private:
 	TSharedPtr<class SCreditsWidget> CreditsWidget;
 
 	TSharedPtr<class SOptionsWidget> OptionsWidget;
+
+	TSharedPtr<class SGraphicsWidget> GraphicsWidget;
 
 	TSharedPtr<class SLoadingScreenWidget> LoadingScreenWidget;
 };
