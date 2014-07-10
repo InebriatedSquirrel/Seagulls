@@ -19,6 +19,8 @@ class SGraphicsWidget : public SCompoundWidget
 public:
 	//Constructs and lays out the Main Menu UI Widget.
     void Construct(const FArguments& args);
+
+	FString SelectedRes;
  
 private:
 

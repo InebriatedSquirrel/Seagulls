@@ -14,6 +14,8 @@ void SGraphicsWidget::Construct(const FArguments& args)
 	Resolutions.Add(MakeShareable(new FString("1920x1080")));
 	Resolutions.Add(MakeShareable(new FString("1280x720")));
 
+	SelectedRes = *Resolutions[0];
+
 	//GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Red, *Resolutions[0] );
 	//GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Red, *Resolutions[1] );
 
@@ -37,6 +39,7 @@ void SGraphicsWidget::Construct(const FArguments& args)
 								.VAlign(VAlign_Center)
 								.Text(FText::FromString("Back"))
 								.OnClicked(this, &SGraphicsWidget::BackClicked)
+								.Cursor(EMouseCursor::Hand)
 						]
 						+ SVerticalBox::Slot().Padding(10.0f)
 						[
@@ -44,9 +47,11 @@ void SGraphicsWidget::Construct(const FArguments& args)
 							.OptionsSource(&Resolutions)
 							.OnGenerateWidget(this, &SGraphicsWidget::OnGenerateWidget)
 							.OnSelectionChanged(this, &SGraphicsWidget::OnSelectedRes)
+							.InitiallySelectedItem(Resolutions[0])
+							.Cursor(EMouseCursor::Hand)
 							.Content()
 							[
-								SNew(STextBlock).Text(FString("1920x1080"))
+								SNew(STextBlock).Text(SelectedRes)
 							]
 						]
 					]
@@ -68,6 +73,8 @@ TSharedRef<SWidget> SGraphicsWidget::OnGenerateWidget(TSharedPtr<FString> Item)
 
 void SGraphicsWidget::OnSelectedRes(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo)
 {
+	SelectedRes = *Item;
 	ResolutionButton->SetSelectedItem(Item);
+	ResolutionButton->RefreshOptions();
 	//ResolutionButton->SetMenuContent(SNew(STextBlock).Text(*Item));
 }
