@@ -82,11 +82,11 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 			LatFlapForce -= (GlideDragAmount * 2.0f);
 		}
 		// If looking upwards, decrease speed
-		if (Controller->GetControlRotation().Vector().Z > 0.0f && Gliding){
+		if (Controller && Controller->GetControlRotation().Vector().Z > 0.0f && Gliding){
 			LatFlapForce -= (GlideDragAmount / 2.0f) * Controller->GetControlRotation().Vector().Z;
 		}
 		// If looking downwards, increase speed
-		if (Controller->GetControlRotation().Vector().Z < 0.0f && Gliding){
+		if (Controller && Controller->GetControlRotation().Vector().Z < 0.0f && Gliding){
 			LatFlapForce -= (GlideDragAmount) * Controller->GetControlRotation().Vector().Z;
 		}
 	}

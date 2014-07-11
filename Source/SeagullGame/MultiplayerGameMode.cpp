@@ -61,11 +61,13 @@ void AMultiplayerGameMode::RemoveSplitscreenPlayers()
 		APlayerController* Controller = *Iterator;
 		if (Controller && Controller->IsLocalController() && !Controller->IsPrimaryPlayer())
 		{
+			
 			ULocalPlayer* ExPlayer = Cast<ULocalPlayer>(Controller->Player);
 			if (ExPlayer)
 			{
 				// don't actually remove players here because it affects our iterator.
 				PlayersToRemove[RemIndex++] = ExPlayer;
+				Controller->PawnPendingDestroy(Controller->GetPawn());
 			}
 		}
 	}
@@ -73,6 +75,8 @@ void AMultiplayerGameMode::RemoveSplitscreenPlayers()
 	// safe cached remove
 	for (int i = 0; i < RemIndex; ++i)
 	{
+		
 		GEngine->GameViewport->RemovePlayer(PlayersToRemove[i]);
 	}
+	
 }
