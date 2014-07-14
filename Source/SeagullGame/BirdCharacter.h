@@ -79,6 +79,14 @@ public:
 		// The length of the glide timer
 		float GlideDelay;
 
+	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadWrite)
+		// Has a cutscene or other actor disabled input
+		bool InputDisabled;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Bird")
+		void Flapped();
+
+
 protected:
 
 	// Begin APawn overrides
@@ -141,5 +149,8 @@ private:
 	bool CameraResetting;
 	// Is the player moving the camera
 	bool Rotating;
+	
+	// Have values been reset upon disabling input yet
+	bool DisableToggled;
 	
 };
