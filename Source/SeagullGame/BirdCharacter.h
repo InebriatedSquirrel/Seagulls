@@ -79,6 +79,9 @@ public:
 		// The length of the glide timer
 		float GlideDelay;
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "Bird")
+		void Flapped();
+
 protected:
 
 	// Begin APawn overrides

@@ -212,6 +212,7 @@ void ABirdCharacter::Flap(float Val){
 		}
 		UpPressed = false;
 	}
+	this->Flapped();
 }
 void ABirdCharacter::FlapForward(float Val){
 
@@ -262,6 +263,7 @@ void ABirdCharacter::FlapForward(float Val){
 		GlideTimerActive = false;
 		ForwardPressed = false;
 	}
+	this->Flapped();
 }
 
 //If the glide input is let go, set the player to falling
