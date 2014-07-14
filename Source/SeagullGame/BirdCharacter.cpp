@@ -89,7 +89,7 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 	if (GlideTimerActive == true){
 		GlideTimer -= DeltaSeconds;
 		if (GlideTimer <= 0.0f){
-			Gliding = false;
+			Gliding = true;
 			Hover = false;
 			GlideTimer = GlideDelay;
 			GlideTimerActive = false;
@@ -142,7 +142,7 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 		
 	}
 	/** Various Debugs */
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, CharacterMovement->GetMovementName());
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, CharacterMovement->GetMovementName());
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::SanitizeFloat(LatFlapForce));
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, "Max Speed: " + FString::SanitizeFloat(CharacterMovement->GetMaxSpeed()));
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Fall Speed: " + FString::SanitizeFloat(CharacterMovement->MaxWalkSpeed));
