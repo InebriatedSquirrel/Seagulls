@@ -66,6 +66,9 @@ public:
 	UPROPERTY(Category = Bird, BlueprintReadOnly)
 		// Is the player currently gliding
 		bool Gliding;
+	UPROPERTY(Category = Bird, BlueprintReadOnly)
+		// Is the player currently hovering
+		bool Hover;
 
 	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadWrite)
 		// The force that flapping adds to forward/sideways movement
@@ -130,8 +133,7 @@ private:
 	// Toggles glide timer on
 	bool GlideTimerActive;
 
-	// Toggles hover
-	bool Hover;
+	
 
 	// Timer which counts down when the camera is moving back to it's original location
 	float CameraResetTimer;
