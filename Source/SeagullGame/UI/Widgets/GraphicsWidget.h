@@ -21,15 +21,18 @@ public:
     void Construct(const FArguments& args);
 
 	TSharedPtr<FString> SelectedRes;
+	bool isFullscreen = false;
  
 private:
 
 	const struct FGlobalStyle* MenuStyle;
 
+	// Resolution
 	TArray<TSharedPtr<FString>> Resolutions;
 	TSharedPtr<SComboBox<TSharedPtr<FString>>> ResolutionButton;
 	void SGraphicsWidget::OnSelectedRes(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo);
 	TSharedPtr<class STextBlock> ResDisplay;
+
 
 	void FullScreenClicked(const ESlateCheckBoxState::Type NewCheckedState);
 

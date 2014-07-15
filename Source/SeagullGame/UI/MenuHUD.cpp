@@ -7,6 +7,8 @@
 #include "SeagullGame/UI/Widgets/OptionsWidget.h"
 #include "SeagullGame/UI/Widgets/LoadingScreenWidget.h"
 #include "SeagullGame/UI/Widgets/GraphicsWidget.h"
+#include "SeagullGame/SeagullsSaveGame.h"
+
 
 AMenuHUD::AMenuHUD(const class FPostConstructInitializeProperties& PCIP)
 	: Super(PCIP)
@@ -18,6 +20,9 @@ AMenuHUD::AMenuHUD(const class FPostConstructInitializeProperties& PCIP)
 void AMenuHUD::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+
+	UserRes = FString("1280x720");
+	useFullscreen = true;
 
 	// Make sure the engine and viewport are valid
 	if (GEngine && GEngine->GameViewport)

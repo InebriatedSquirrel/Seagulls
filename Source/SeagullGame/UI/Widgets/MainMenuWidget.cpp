@@ -72,14 +72,14 @@ void SMainMenuWidget::Construct(const FArguments& args)
  
 FReply SMainMenuWidget::SinglePlayerClicked()
 {
-	//MenuHUD->OpenLoadingScreen();
+	MenuHUD->OpenLoadingScreen();
     MenuHUD->SinglePlayerClicked();
     return FReply::Handled();
 }
 
 FReply SMainMenuWidget::MultiPlayerClicked()
 {
-	//MenuHUD->OpenLoadingScreen();
+	MenuHUD->OpenLoadingScreen();
 	MenuHUD->MultiPlayerClicked();
 	return FReply::Handled();
 }

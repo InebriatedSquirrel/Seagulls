@@ -11,21 +11,39 @@ void SGraphicsWidget::Construct(const FArguments& args)
 
 	MenuStyle = &FMenuStyles::Get().GetWidgetStyle<FGlobalStyle>("GlobalMenuStyle");
 
+	// Load up resolution values
+	Resolutions.Add(MakeShareable(new FString("2560x1440")));
 	Resolutions.Add(MakeShareable(new FString("1920x1200")));
 	Resolutions.Add(MakeShareable(new FString("1920x1080")));
 	Resolutions.Add(MakeShareable(new FString("1680x1050")));
 	Resolutions.Add(MakeShareable(new FString("1600x900")));
+	Resolutions.Add(MakeShareable(new FString("1440x900")));
+	Resolutions.Add(MakeShareable(new FString("1280x1024")));
+	Resolutions.Add(MakeShareable(new FString("1366x768")));
+	Resolutions.Add(MakeShareable(new FString("1360x768")));
+	Resolutions.Add(MakeShareable(new FString("1280x800")));
 	Resolutions.Add(MakeShareable(new FString("1280x720")));
+	Resolutions.Add(MakeShareable(new FString("1024x768")));
 
-	SelectedRes = Resolutions[4];
+	// Set the initial resolution
+	SelectedRes = MakeShareable(&MenuHUD->UserRes);
 
-	//GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Red, *Resolutions[0] );
-	//GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Red, *Resolutions[1] );
+	// See if the inital res is a predetermined value
+	for (int32 i = 0; i < Resolutions.Num(); i++)
+	{
+		if (*Resolutions[i] == MenuHUD->UserRes)
+		{
+			SelectedRes = Resolutions[i];
+		}
+		break;
+	}
+	
+	if (MenuHUD->useFullscreen)
+	{
+		this->FullScreenClicked(ESlateCheckBoxState::Checked);
+	}
 
-
-	//Use this to grab data
-	//UEngine::LoadConfig();
-
+	// Slate widget building
     ChildSlot
         [
             SNew(SOverlay)
@@ -96,10 +114,12 @@ void SGraphicsWidget::FullScreenClicked(const ESlateCheckBoxState::Type NewCheck
 	if (NewCheckedState == ESlateCheckBoxState::Checked)
 	{
 		GEngine->GameViewport->ConsoleCommand("SETRES " + *SelectedRes + "f");
+		isFullscreen = true;
 	}
 	else if (NewCheckedState == ESlateCheckBoxState::Unchecked)
 	{
 		GEngine->GameViewport->ConsoleCommand("SETRES " + *SelectedRes + "w");
+		isFullscreen = false;
 	}
 }
 
@@ -116,6 +136,13 @@ void SGraphicsWidget::OnSelectedRes(TSharedPtr<FString> Item, ESelectInfo::Type 
 	ResDisplay->SetText(*SelectedRes);
 	ResolutionButton->RefreshOptions();
 
-	GEngine->GameViewport->ConsoleCommand("SETRES " + *Item);
+	if (isFullscreen == true)
+	{
+		GEngine->GameViewport->ConsoleCommand("SETRES " + *Item + "f");
+	}
+	else
+	{
+		GEngine->GameViewport->ConsoleCommand("SETRES " + *Item + "w");
+	}
 	//ResolutionButton->SetMenuContent(SNew(STextBlock).Text(*Item));
 }
