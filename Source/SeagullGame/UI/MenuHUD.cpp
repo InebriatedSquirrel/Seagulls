@@ -22,7 +22,15 @@ void AMenuHUD::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 	UserRes = FString("1280x720");
-	useFullscreen = true;
+	UseFullscreen = true;
+	UserResScale = "100%";
+	UserViewDistance = "Far";
+	UserAA = "4";
+	UserPostProcessing = "High";
+	UserShadows = "High";
+	UserTextures = "High";
+	UserEffects = "High";
+	UserDetail = "High";
 
 	// Make sure the engine and viewport are valid
 	if (GEngine && GEngine->GameViewport)
@@ -38,6 +46,34 @@ void AMenuHUD::PostInitializeComponents()
 	}
 	CurrentMenu = "MainMenu";
 }
+
+void AMenuHUD::ApplySettings()
+{
+	//Resolution
+	if (UseFullscreen)
+	{
+		GEngine->GameViewport->ConsoleCommand("SETRES " + UserRes + "f");
+	}
+	else if (UseFullscreen)
+	{
+		GEngine->GameViewport->ConsoleCommand("SETRES " + UserRes + "w");
+	}
+
+	//Scale
+	if (UserResScale == "100%")
+	{
+		GEngine->GameViewport->ConsoleCommand("r.ScreenPercentage 100");
+	}
+	else if (UserResScale == "75%")
+	{
+		GEngine->GameViewport->ConsoleCommand("r.ScreenPercentage 75");
+	}
+	else if (UserResScale == "50%")
+	{
+		GEngine->GameViewport->ConsoleCommand("r.ScreenPercentage 50");
+	}
+}
+
 
 void AMenuHUD::OpenOptionsMenu()
 {

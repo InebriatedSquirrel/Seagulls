@@ -50,6 +50,8 @@ public:
 	void OnTexturesSet();
 	UFUNCTION(BlueprintImplementableEvent, Category = "Menus|Graphics")
 	void OnDetailSet();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Menus|Graphics")
+	void OnSaveSettings();
 
 	//------Options Buttons--------
 
@@ -65,6 +67,8 @@ public:
 	void ExitMenu();
 	UFUNCTION(BlueprintCallable, Category = "Menus|General")
 	void OpenLoadingScreen();
+	UFUNCTION(BlueprintCallable, Category = "Menus|General")
+	void ApplySettings();
 
 	// Holds the current menu in a string
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Menus|General")
@@ -77,13 +81,31 @@ public:
 	FString UserRes;
 	// Fullscreen toggle set by the user - Default is true
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Saved Data")
-	bool useFullscreen;
-	// Fullscreen toggle set by the user - Default is true
+	bool UseFullscreen;
+	// Resolution Scale set by the user - Default is 100
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Saved Data")
-	int32 UserResScale;
-	// Fullscreen toggle set by the user - Default is true
+	FString UserResScale;
+	// View Distance set by the user - Default is 1.0
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Saved Data")
-	float UserViewDistance;
+	FString UserViewDistance;
+	// Anti-Aliasing set by the user - Default is 4
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Saved Data")
+	FString UserAA;
+	// Post Processing Quality set by the user - Default is 3
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Saved Data")
+	FString UserPostProcessing;
+	// Shadows Quality set by the user - Default is 3
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Saved Data")
+	FString UserShadows;
+	// Texture Quality set by the user - Default is 3
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Saved Data")
+	FString UserTextures;
+	// Effects Quality set by the user - Default is 3
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Saved Data")
+	FString UserEffects;
+	// Detail Level set by the user - Default is 2
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Saved Data")
+	FString UserDetail;
 
 
 	// Functions for opening new widgets/menus in slate

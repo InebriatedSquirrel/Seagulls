@@ -11,24 +11,10 @@ void SGraphicsWidget::Construct(const FArguments& args)
 
 	MenuStyle = &FMenuStyles::Get().GetWidgetStyle<FGlobalStyle>("GlobalMenuStyle");
 
-	// Load up resolution values
-	Resolutions.Add(MakeShareable(new FString("2560x1440")));
-	Resolutions.Add(MakeShareable(new FString("1920x1200")));
-	Resolutions.Add(MakeShareable(new FString("1920x1080")));
-	Resolutions.Add(MakeShareable(new FString("1680x1050")));
-	Resolutions.Add(MakeShareable(new FString("1600x900")));
-	Resolutions.Add(MakeShareable(new FString("1440x900")));
-	Resolutions.Add(MakeShareable(new FString("1280x1024")));
-	Resolutions.Add(MakeShareable(new FString("1366x768")));
-	Resolutions.Add(MakeShareable(new FString("1360x768")));
-	Resolutions.Add(MakeShareable(new FString("1280x800")));
-	Resolutions.Add(MakeShareable(new FString("1280x720")));
-	Resolutions.Add(MakeShareable(new FString("1024x768")));
+	//----Get Initial values-----
 
+	this->MakeResolutions();
 	// Set the initial resolution
-	SelectedRes = MakeShareable(&MenuHUD->UserRes);
-
-	// See if the inital res is a predetermined value
 	for (int32 i = 0; i < Resolutions.Num(); i++)
 	{
 		if (*Resolutions[i] == MenuHUD->UserRes)
@@ -37,10 +23,16 @@ void SGraphicsWidget::Construct(const FArguments& args)
 		}
 		break;
 	}
-	
-	if (MenuHUD->useFullscreen)
+
+	this->MakeScaleValues();
+	// Set the initial Scale value
+	for (int32 i = 0; i < ScaleValues.Num(); i++)
 	{
-		this->FullScreenClicked(ESlateCheckBoxState::Checked);
+		if (*ScaleValues[i] == *MenuHUD->UserResScale)
+		{
+			ResScaleVal = ScaleValues[i];
+		}
+		break;
 	}
 
 	// Slate widget building
@@ -52,23 +44,34 @@ void SGraphicsWidget::Construct(const FArguments& args)
                 .VAlign(VAlign_Center)
                 [
 					SNew(SHorizontalBox)
-					
+					// Column 1
 					+ SHorizontalBox::Slot().Padding(10.0f)
 					[
 						SNew(SVerticalBox)
 
 						+ SVerticalBox::Slot().Padding(10.0f)
 						[
-							SAssignNew(this->ResolutionButton, SComboBox<TSharedPtr<FString>>)
-							.OptionsSource(&Resolutions)
-							.OnGenerateWidget(this, &SGraphicsWidget::OnGenerateWidget)
-							.OnSelectionChanged(this, &SGraphicsWidget::OnSelectedRes)
-							.InitiallySelectedItem(SelectedRes)
-							.Cursor(EMouseCursor::Hand)
-							.Content()
+							SNew(SHorizontalBox)
+
+							+ SHorizontalBox::Slot().HAlign(HAlign_Left).AutoWidth()
 							[
-								SAssignNew(this->ResDisplay, STextBlock)
-									.Text(*SelectedRes)
+								SNew(STextBlock)
+								.Text(FString("Resolution:"))
+								.ColorAndOpacity(FLinearColor::Black)
+							]
+							+ SHorizontalBox::Slot().HAlign(HAlign_Left).AutoWidth()
+							[
+								SAssignNew(this->ResolutionButton, SComboBox<TSharedPtr<FString>>)
+								.OptionsSource(&Resolutions)
+								.OnGenerateWidget(this, &SGraphicsWidget::OnGenerateWidget)
+								.OnSelectionChanged(this, &SGraphicsWidget::OnSelectedRes)
+								.InitiallySelectedItem(SelectedRes)
+								.Cursor(EMouseCursor::Hand)
+								.Content()
+								[
+									SAssignNew(this->ResDisplay, STextBlock)
+										.Text(*SelectedRes)
+								]
 							]
 						]
 						+ SVerticalBox::Slot().Padding(10.0f)
@@ -83,9 +86,10 @@ void SGraphicsWidget::Construct(const FArguments& args)
 							]
 							+ SHorizontalBox::Slot().HAlign(HAlign_Right)
 							[
-								SNew(SCheckBox)
+								SAssignNew(FullscreenButton, SCheckBox)
 								.OnCheckStateChanged(this, &SGraphicsWidget::FullScreenClicked)
 								.Cursor(EMouseCursor::Hand)
+								.IsChecked(CheckFullScreen())
 							]
 						]
 						+ SVerticalBox::Slot().Padding(10.0f)
@@ -98,13 +102,42 @@ void SGraphicsWidget::Construct(const FArguments& args)
 							.Cursor(EMouseCursor::Hand)
 						]
 					]
-                ]
+					// Column 2
+					+ SHorizontalBox::Slot().Padding(10.0f)
+					[
+						SNew(SVerticalBox)
+						+ SVerticalBox::Slot().Padding(10.0f)
+						[
+							SNew(SHorizontalBox)
+							+ SHorizontalBox::Slot().HAlign(HAlign_Left).AutoWidth()
+							[
+								SNew(STextBlock)
+								.Text(FString("Resolution Scale"))
+								.ColorAndOpacity(FLinearColor::Black)
+							]
+							+ SHorizontalBox::Slot().HAlign(HAlign_Left).AutoWidth()
+							[
+								SAssignNew(this->ResScaleButton, STextComboBox)
+								.OptionsSource(&ScaleValues)
+								.OnSelectionChanged(this, &SGraphicsWidget::OnSelectedScale)
+								.InitiallySelectedItem(ResScaleVal)
+								.Cursor(EMouseCursor::Hand)
+							]
+						]
+					]
+					// Column 3
+					/*+ SHorizontalBox::Slot().Padding(10.0f)
+					[
+						
+					]*/
+				]
         ];
 }
 
 FReply SGraphicsWidget::BackClicked()
 {
 	MenuHUD->ExitMenu();
+	MenuHUD->OnSaveSettings();
 
 	return FReply::Handled();
 }
@@ -120,7 +153,9 @@ void SGraphicsWidget::FullScreenClicked(const ESlateCheckBoxState::Type NewCheck
 	{
 		GEngine->GameViewport->ConsoleCommand("SETRES " + *SelectedRes + "w");
 		isFullscreen = false;
+		
 	}
+	MenuHUD->UseFullscreen = isFullscreen;
 }
 
 TSharedRef<SWidget> SGraphicsWidget::OnGenerateWidget(TSharedPtr<FString> Item)
@@ -132,6 +167,7 @@ TSharedRef<SWidget> SGraphicsWidget::OnGenerateWidget(TSharedPtr<FString> Item)
 void SGraphicsWidget::OnSelectedRes(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo)
 {
 	SelectedRes = Item;
+	MenuHUD->UserRes = *Item;
 	ResolutionButton->SetSelectedItem(Item);
 	ResDisplay->SetText(*SelectedRes);
 	ResolutionButton->RefreshOptions();
@@ -145,4 +181,62 @@ void SGraphicsWidget::OnSelectedRes(TSharedPtr<FString> Item, ESelectInfo::Type 
 		GEngine->GameViewport->ConsoleCommand("SETRES " + *Item + "w");
 	}
 	//ResolutionButton->SetMenuContent(SNew(STextBlock).Text(*Item));
+}
+
+void SGraphicsWidget::OnSelectedScale(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo)
+{
+	ResScaleVal = Item;
+	MenuHUD->UserResScale = *Item;
+	ResScaleButton->SetSelectedItem(Item);
+	ResScaleButton->RefreshOptions();
+
+	if (*Item == "100%")
+	{
+		GEngine->GameViewport->ConsoleCommand("r.ScreenPercentage 100");
+	}
+	else if (*Item == "75%")
+	{
+		GEngine->GameViewport->ConsoleCommand("r.ScreenPercentage 75");
+	}
+	else if (*Item == "50%")
+	{
+		GEngine->GameViewport->ConsoleCommand("r.ScreenPercentage 50");
+	}
+	
+}
+
+void SGraphicsWidget::MakeResolutions()
+{
+	// Load up resolution values
+	Resolutions.Add(MakeShareable(new FString("2560x1440")));
+	Resolutions.Add(MakeShareable(new FString("1920x1200")));
+	Resolutions.Add(MakeShareable(new FString("1920x1080")));
+	Resolutions.Add(MakeShareable(new FString("1680x1050")));
+	Resolutions.Add(MakeShareable(new FString("1600x900")));
+	Resolutions.Add(MakeShareable(new FString("1440x900")));
+	Resolutions.Add(MakeShareable(new FString("1280x1024")));
+	Resolutions.Add(MakeShareable(new FString("1366x768")));
+	Resolutions.Add(MakeShareable(new FString("1360x768")));
+	Resolutions.Add(MakeShareable(new FString("1280x800")));
+	Resolutions.Add(MakeShareable(new FString("1280x720")));
+	Resolutions.Add(MakeShareable(new FString("1024x768")));
+}
+
+ESlateCheckBoxState::Type SGraphicsWidget::CheckFullScreen()
+{
+	if (MenuHUD->UseFullscreen)
+	{
+		return ESlateCheckBoxState::Checked;
+	}
+	else
+	{
+		return ESlateCheckBoxState::Unchecked;
+	}
+}
+
+void SGraphicsWidget::MakeScaleValues()
+{
+	ScaleValues.Add(MakeShareable(new FString("50%")));
+	ScaleValues.Add(MakeShareable(new FString("75%")));
+	ScaleValues.Add(MakeShareable(new FString("100%")));
 }
