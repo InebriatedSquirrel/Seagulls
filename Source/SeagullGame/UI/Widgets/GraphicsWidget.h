@@ -23,6 +23,7 @@ public:
 	TSharedPtr<FString> SelectedRes;
 	bool isFullscreen = false;
 	TSharedPtr<FString> ResScaleVal;
+	bool PendingChanges = false;
  
 private:
 
@@ -31,7 +32,7 @@ private:
 	// Resolution
 	TArray<TSharedPtr<FString>> Resolutions;
 	void MakeResolutions();
-	TSharedPtr<SComboBox<TSharedPtr<FString>>> ResolutionButton;
+	TSharedPtr<STextComboBox> ResolutionButton;
 	void SGraphicsWidget::OnSelectedRes(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo);
 	TSharedPtr<class STextBlock> ResDisplay;
 	

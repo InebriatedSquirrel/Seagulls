@@ -52,6 +52,8 @@ public:
 	void OnDetailSet();
 	UFUNCTION(BlueprintImplementableEvent, Category = "Menus|Graphics")
 	void OnSaveSettings();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Menus|Graphics")
+	void OnRevert();
 
 	//------Options Buttons--------
 
