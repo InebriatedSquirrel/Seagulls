@@ -86,8 +86,17 @@ public:
 		// Has a cutscene or other actor disabled input
 		bool InputDisabled;
 
+	// Called when either flap direction is triggered
 	UFUNCTION(BlueprintImplementableEvent, Category = "Bird")
 		void Flapped();
+
+	// Called when the SetMission console command is used
+	UFUNCTION(BlueprintImplementableEvent, Category = "Bird")
+		void OnMissionCheat(float mission);
+	
+	// Cheat function to set the mission number to a designated value
+	UFUNCTION(exec)
+		void SetMission(float mission);
 
 
 protected:

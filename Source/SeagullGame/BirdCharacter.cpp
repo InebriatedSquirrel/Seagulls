@@ -348,3 +348,8 @@ void ABirdCharacter::Brake(){
 void ABirdCharacter::ReleaseBrake(){
 		Braking = false;
 }
+
+// If this cheat was used, pass the event to blueprints
+void ABirdCharacter::SetMission(float mission){
+	this->OnMissionCheat(mission);
+}
