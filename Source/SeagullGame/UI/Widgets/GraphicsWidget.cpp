@@ -122,24 +122,23 @@ void SGraphicsWidget::Construct(const FArguments& args)
 							.Cursor(EMouseCursor::Hand)
 						]
 					]
-					SNew(SVerticalBox)
-						+ SVerticalBox::Slot().Padding(10.0f)
+					+ SVerticalBox::Slot().Padding(10.0f)
+					[
+						SNew(SHorizontalBox)
+						+ SHorizontalBox::Slot().HAlign(HAlign_Left).AutoWidth()
 						[
-							SNew(SHorizontalBox)
-							+ SHorizontalBox::Slot().HAlign(HAlign_Left).AutoWidth()
+							SNew(STextBlock)
+							.Text(FString("Resolution Scale"))
+							.ColorAndOpacity(FLinearColor::Black)
+						]
+						+ SHorizontalBox::Slot().HAlign(HAlign_Right)
 							[
-								SNew(STextBlock)
-								.Text(FString("Resolution Scale"))
-								.ColorAndOpacity(FLinearColor::Black)
+								SAssignNew(this->ResScaleButton, STextComboBox)
+								.OptionsSource(&ScaleValues)
+								.OnSelectionChanged(this, &SGraphicsWidget::OnSelectedScale)
+								.InitiallySelectedItem(ResScaleVal)
+								.Cursor(EMouseCursor::Hand)
 							]
-							+ SHorizontalBox::Slot().HAlign(HAlign_Right)
-								[
-									SAssignNew(this->ResScaleButton, STextComboBox)
-									.OptionsSource(&ScaleValues)
-									.OnSelectionChanged(this, &SGraphicsWidget::OnSelectedScale)
-									.InitiallySelectedItem(ResScaleVal)
-									.Cursor(EMouseCursor::Hand)
-								]
 						]
 						/*+ SVerticalBox::Slot().Padding(10.0f)
 						[
