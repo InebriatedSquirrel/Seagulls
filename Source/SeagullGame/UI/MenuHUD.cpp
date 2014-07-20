@@ -22,7 +22,7 @@ void AMenuHUD::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 	UserRes = FString("1280x720");
-	UseFullscreen = true;
+	UseFullscreen = false;
 	UserResScale = "100%";
 	UserViewDistance = "Far";
 	UserAA = "4";
