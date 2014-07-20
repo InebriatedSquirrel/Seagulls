@@ -86,6 +86,10 @@ public:
 		// Has a cutscene or other actor disabled input
 		bool InputDisabled;
 
+	UPROPERTY(Category = Bird, EditAnywhere, BlueprintReadWrite)
+		// The delay between collision sounds
+		float CollisionSoundDelay;
+
 	// Called when either flap direction is triggered
 	UFUNCTION(BlueprintImplementableEvent, Category = "Bird")
 		void Flapped();
@@ -93,6 +97,10 @@ public:
 	// Called when the SetMission console command is used
 	UFUNCTION(BlueprintImplementableEvent, Category = "Bird")
 		void OnMissionCheat(float mission);
+
+	// Called when the collision sound should be played
+	UFUNCTION(BlueprintImplementableEvent, Category = "Bird")
+		void OnPlayCollisionSound();
 	
 	// Cheat function to set the mission number to a designated value
 	UFUNCTION(exec)
@@ -142,8 +150,6 @@ private:
 	// Toggles glide timer on
 	bool GlideTimerActive;
 
-	
-
 	// Timer which counts down when the camera is moving back to it's original location
 	float CameraResetTimer;
 
@@ -164,4 +170,6 @@ private:
 	// Have values been reset upon disabling input yet
 	bool DisableToggled;
 	
+	// Timer to track time between collisions
+	float CollisionTimer;
 };

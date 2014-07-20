@@ -49,6 +49,8 @@ ABirdCharacter::ABirdCharacter(const class FPostConstructInitializeProperties& P
 	GlideDelay = 0.14f;
 	GlideTimer = GlideDelay;
 	InputDisabled = false;
+	CollisionSoundDelay = 1.0f;
+	CollisionTimer = 0.0f;
 
 	// Setting Default Values
 	CharacterMovement->MaxFlySpeed = GlideMaxSpeed;
@@ -177,7 +179,14 @@ void ABirdCharacter::Tick(float DeltaSeconds)
 			SpringArm->SetRelativeRotation(FRotator(0.f, 90.0f, 0.0f));
 		}
 	}
-
+	if (CollisionTimer >= 0.0f)
+	{
+		CollisionTimer -= DeltaSeconds;
+	}
+	else
+	{
+		CollisionTimer = 0.0f;
+	}
 	// Call any parent class Tick implementation
 	Super::Tick(DeltaSeconds);
 }
@@ -193,6 +202,11 @@ void ABirdCharacter::ReceiveHit(class UPrimitiveComponent* MyComp, class AActor*
 	else if (!InputDisabled){
 		CharacterMovement->SetMovementMode(MOVE_Falling);
 		LatFlapForce = 0.0f;
+		if (CollisionTimer == 0.0f)
+		{
+			OnPlayCollisionSound();
+			CollisionTimer = CollisionSoundDelay;
+		}
 	}
 }
 
