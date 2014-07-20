@@ -102,8 +102,27 @@ void SGraphicsWidget::Construct(const FArguments& args)
 				]
 				// Column 2
 				+ SHorizontalBox::Slot().Padding(10.0f)
+				[
+					SNew(SVerticalBox)
+					+ SVerticalBox::Slot().Padding(10.0f)
 					[
-						SNew(SVerticalBox)
+						SNew(SHorizontalBox)
+						+ SHorizontalBox::Slot().HAlign(HAlign_Left).AutoWidth()
+						[
+							SNew(STextBlock)
+							.Text(FString("Resolution Scale"))
+							.ColorAndOpacity(FLinearColor::Black)
+						]
+						+ SHorizontalBox::Slot().HAlign(HAlign_Right)
+						[
+							SAssignNew(this->ResScaleButton, STextComboBox)
+							.OptionsSource(&ScaleValues)
+							.OnSelectionChanged(this, &SGraphicsWidget::OnSelectedScale)
+							.InitiallySelectedItem(ResScaleVal)
+							.Cursor(EMouseCursor::Hand)
+						]
+					]
+					SNew(SVerticalBox)
 						+ SVerticalBox::Slot().Padding(10.0f)
 						[
 							SNew(SHorizontalBox)
@@ -114,15 +133,15 @@ void SGraphicsWidget::Construct(const FArguments& args)
 								.ColorAndOpacity(FLinearColor::Black)
 							]
 							+ SHorizontalBox::Slot().HAlign(HAlign_Right)
-							[
-								SAssignNew(this->ResScaleButton, STextComboBox)
-								.OptionsSource(&ScaleValues)
-								.OnSelectionChanged(this, &SGraphicsWidget::OnSelectedScale)
-								.InitiallySelectedItem(ResScaleVal)
-								.Cursor(EMouseCursor::Hand)
-							]
+								[
+									SAssignNew(this->ResScaleButton, STextComboBox)
+									.OptionsSource(&ScaleValues)
+									.OnSelectionChanged(this, &SGraphicsWidget::OnSelectedScale)
+									.InitiallySelectedItem(ResScaleVal)
+									.Cursor(EMouseCursor::Hand)
+								]
 						]
-						+ SVerticalBox::Slot().Padding(10.0f)
+						/*+ SVerticalBox::Slot().Padding(10.0f)
 						[
 							SNew(SButton)
 							.HAlign(HAlign_Center)
@@ -130,8 +149,8 @@ void SGraphicsWidget::Construct(const FArguments& args)
 							.Text(FText::FromString("Apply"))
 							.OnClicked(this, &SGraphicsWidget::ApplyClicked)
 							.Cursor(EMouseCursor::Hand)
-						]
-					]
+						]*/
+				]
 					// Column 3
 					/*+ SHorizontalBox::Slot().Padding(10.0f)
 					[
@@ -146,18 +165,12 @@ void SGraphicsWidget::Construct(const FArguments& args)
 FReply SGraphicsWidget::BackClicked()
 {
 	MenuHUD->ExitMenu();
-	if (PendingChanges){
-		MenuHUD->OnRevert();
-	}
+	MenuHUD->OnSaveSettings();
 	return FReply::Handled();
 }
 
 FReply SGraphicsWidget::ApplyClicked()
 {
-	MenuHUD->OnSaveSettings();
-	
-	PendingChanges = false;
-
 	return FReply::Handled();
 }
 
@@ -176,7 +189,6 @@ void SGraphicsWidget::FullScreenClicked(const ESlateCheckBoxState::Type NewCheck
 	}
 	MenuHUD->UseFullscreen = isFullscreen;
 
-	PendingChanges = true;
 }
 
 void SGraphicsWidget::OnSelectedRes(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo)

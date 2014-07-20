@@ -34,14 +34,18 @@ private:
 	void MakeResolutions();
 	TSharedPtr<STextComboBox> ResolutionButton;
 	void SGraphicsWidget::OnSelectedRes(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo);
-	TSharedPtr<class STextBlock> ResDisplay;
 	
 	// Resolution Scale
 	TArray<TSharedPtr<FString>> ScaleValues;
 	void MakeScaleValues();
 	TSharedPtr<STextComboBox> ResScaleButton;
 	void SGraphicsWidget::OnSelectedScale(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo);
-	TSharedPtr<class STextBlock> ScaleDisplay;
+
+	// Resolution Scale
+	TArray<TSharedPtr<FString>> DistValues;
+	void MakeDistValues();
+	TSharedPtr<STextComboBox> ViewDistanceButton;
+	void SGraphicsWidget::OnSelectedDist(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo);
 
 	// Fullscreen toggle
 	TSharedPtr<SCheckBox> FullscreenButton;
