@@ -58,6 +58,7 @@ void SOptionsWidget::Construct(const FArguments& args)
 FReply SOptionsWidget::GraphicsClicked()
 {
 	MenuHUD->GraphicsClicked();
+	MenuHUD->OpenGraphicsMenu();
 
 	return FReply::Handled();
 }
