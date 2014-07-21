@@ -51,5 +51,8 @@ public:
 	// Detail Level set by the user - Default is 2
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Graphics")
 		FString SavedDetail;
-	
+
+	// Number of Muliplayer players when loading a multiplayer map - Default is 2
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Gameplay")
+		FString NumMultiPlayers;
 };

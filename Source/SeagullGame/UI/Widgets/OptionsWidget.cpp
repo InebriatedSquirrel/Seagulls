@@ -73,6 +73,7 @@ FReply SOptionsWidget::ControlsClicked()
 FReply SOptionsWidget::AudioClicked()
 {
 	MenuHUD->AudioClicked();
+	MenuHUD->OpenAudioMenu();
 
 	return FReply::Handled();
 }

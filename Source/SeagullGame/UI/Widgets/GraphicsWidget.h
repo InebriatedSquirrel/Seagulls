@@ -23,7 +23,7 @@ public:
 	TSharedPtr<FString> SelectedRes;
 	bool isFullscreen = false;
 	TSharedPtr<FString> ResScaleVal;
-	bool PendingChanges = false;
+	TSharedPtr<FString> DistanceVal;
  
 private:
 
@@ -41,7 +41,7 @@ private:
 	TSharedPtr<STextComboBox> ResScaleButton;
 	void SGraphicsWidget::OnSelectedScale(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo);
 
-	// Resolution Scale
+	// View Distance
 	TArray<TSharedPtr<FString>> DistValues;
 	void MakeDistValues();
 	TSharedPtr<STextComboBox> ViewDistanceButton;

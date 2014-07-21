@@ -22,7 +22,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Menus|Main Menu")
 	void SinglePlayerClicked();
 	UFUNCTION(BlueprintImplementableEvent, Category = "Menus|Main Menu")
-	void MultiPlayerClicked();
+	void PlayMultiPlayerClicked();
 	UFUNCTION(BlueprintImplementableEvent, Category = "Menus|Main Menu")
 	void OptionsClicked();
 	UFUNCTION(BlueprintImplementableEvent, Category = "Menus|Main Menu")
@@ -63,6 +63,11 @@ public:
 	void ControlsClicked();
 	UFUNCTION(BlueprintImplementableEvent, Category = "Menus|Options")
 	void AudioClicked();
+
+	//------Multiplayer Buttons--------
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Menus|Multiplayer")
+	void PlayerNumClicked();
 
 	// General buttons/functions
 	UFUNCTION(BlueprintCallable, Category = "Menus|General")
@@ -109,10 +114,19 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Saved Data")
 	FString UserDetail;
 
+	// Number of Muliplayer players when loading a multiplayer map - Default is 2
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Saved Data")
+	FString UserNumMultiPlayers;
+	// The Map selected by the player
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Multiplayer")
+	FString UserMultiMap;
+
 
 	// Functions for opening new widgets/menus in slate
 	void OpenOptionsMenu();
 	void OpenGraphicsMenu();
+	void OpenAudioMenu();
+	void OpenMultiplayerMenu();
 	void OpenCredits();
 
 private:
@@ -126,6 +140,10 @@ private:
 	TSharedPtr<class SOptionsWidget> OptionsWidget;
 
 	TSharedPtr<class SGraphicsWidget> GraphicsWidget;
+
+	TSharedPtr<class SAudioWidget> AudioWidget;
+
+	TSharedPtr<class SMultiplayerMenuWidget> MultiplayerMenuWidget;
 
 	TSharedPtr<class SLoadingScreenWidget> LoadingScreenWidget;
 };

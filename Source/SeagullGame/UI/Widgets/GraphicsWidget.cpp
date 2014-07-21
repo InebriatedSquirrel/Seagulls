@@ -36,7 +36,18 @@ void SGraphicsWidget::Construct(const FArguments& args)
 			ResScaleVal = ScaleValues[i];
 			break;
 		}
-		
+	}
+
+	this->MakeDistValues();
+	// Set the initial View Distance value
+	for (int32 i = 0; i < DistValues.Num(); i++)
+	{
+		if (*DistValues[i] == *MenuHUD->UserViewDistance)
+		{
+			DistanceVal = DistValues[i];
+			break;
+		}
+
 	}
 
 	// Slate widget building
@@ -47,91 +58,77 @@ void SGraphicsWidget::Construct(const FArguments& args)
 			.HAlign(HAlign_Center)
 			.VAlign(VAlign_Center)
 			[
-				SNew(SHorizontalBox)
-				// Column 1
-				+ SHorizontalBox::Slot().Padding(10.0f)
+				SNew(SVerticalBox)
+				+ SVerticalBox::Slot().Padding(10.0f)
 				[
-					SNew(SVerticalBox)
-
-					+ SVerticalBox::Slot().Padding(10.0f)
+				
+					SNew(SHorizontalBox)
+					// Column 1
+					+ SHorizontalBox::Slot().Padding(10.0f)
 					[
-						SNew(SHorizontalBox)
+						SNew(SVerticalBox)
 
-						+ SHorizontalBox::Slot().HAlign(HAlign_Left).AutoWidth()
+						+ SVerticalBox::Slot().Padding(10.0f)
 						[
-							SNew(STextBlock)
-							.Text(FString("Resolution:"))
-							.ColorAndOpacity(FLinearColor::Black)
-						]
-						+ SHorizontalBox::Slot().HAlign(HAlign_Right).AutoWidth()
+							SNew(SHorizontalBox)
+
+							+ SHorizontalBox::Slot().HAlign(HAlign_Left).AutoWidth()
 							[
-								SAssignNew(this->ResolutionButton, STextComboBox)
-								.OptionsSource(&Resolutions)
-								.OnSelectionChanged(this, &SGraphicsWidget::OnSelectedRes)
-								.InitiallySelectedItem(SelectedRes)
-								.Cursor(EMouseCursor::Hand)
+								SNew(STextBlock)
+								.Text(FString("Resolution:"))
+								.ColorAndOpacity(FLinearColor::Black)
 							]
-					]
-					+ SVerticalBox::Slot().Padding(10.0f)
-					[
-						SNew(SHorizontalBox)
+							+ SHorizontalBox::Slot().HAlign(HAlign_Right).AutoWidth()
+								[
+									SAssignNew(this->ResolutionButton, STextComboBox)
+									.OptionsSource(&Resolutions)
+									.OnSelectionChanged(this, &SGraphicsWidget::OnSelectedRes)
+									.InitiallySelectedItem(SelectedRes)
+									.Cursor(EMouseCursor::Hand)
+								]
+						]
+						+ SVerticalBox::Slot().Padding(10.0f)
+						[
+							SNew(SHorizontalBox)
 
-						+ SHorizontalBox::Slot().HAlign(HAlign_Left).AutoWidth()
-						[
-							SNew(STextBlock)
-							.Text(FString("FullScreen"))
-							.ColorAndOpacity(FLinearColor::Black)
+							+ SHorizontalBox::Slot().HAlign(HAlign_Left).AutoWidth()
+							[
+								SNew(STextBlock)
+								.Text(FString("FullScreen"))
+								.ColorAndOpacity(FLinearColor::Black)
+							]
+							+ SHorizontalBox::Slot().HAlign(HAlign_Right)
+							[
+								SAssignNew(FullscreenButton, SCheckBox)
+								.OnCheckStateChanged(this, &SGraphicsWidget::FullScreenClicked)
+								.Cursor(EMouseCursor::Hand)
+								.IsChecked(CheckFullScreen())
+							]
 						]
-						+ SHorizontalBox::Slot().HAlign(HAlign_Right)
+						+ SVerticalBox::Slot().Padding(10.0f)
 						[
-							SAssignNew(FullscreenButton, SCheckBox)
-							.OnCheckStateChanged(this, &SGraphicsWidget::FullScreenClicked)
-							.Cursor(EMouseCursor::Hand)
-							.IsChecked(CheckFullScreen())
-						]
-					]
-					+ SVerticalBox::Slot().Padding(10.0f)
-					[
-						SNew(SButton)
-						.HAlign(HAlign_Center)
-						.VAlign(VAlign_Center)
-						.Text(FText::FromString("Back"))
-						.OnClicked(this, &SGraphicsWidget::BackClicked)
-						.Cursor(EMouseCursor::Hand)
-					]
-				]
-				// Column 2
-				+ SHorizontalBox::Slot().Padding(10.0f)
-				[
-					SNew(SVerticalBox)
-					+ SVerticalBox::Slot().Padding(10.0f)
-					[
-						SNew(SHorizontalBox)
-						+ SHorizontalBox::Slot().HAlign(HAlign_Left).AutoWidth()
-						[
-							SNew(STextBlock)
-							.Text(FString("Resolution Scale"))
-							.ColorAndOpacity(FLinearColor::Black)
-						]
-						+ SHorizontalBox::Slot().HAlign(HAlign_Right)
-						[
-							SAssignNew(this->ResScaleButton, STextComboBox)
-							.OptionsSource(&ScaleValues)
-							.OnSelectionChanged(this, &SGraphicsWidget::OnSelectedScale)
-							.InitiallySelectedItem(ResScaleVal)
+							SNew(SButton)
+							.HAlign(HAlign_Center)
+							.VAlign(VAlign_Center)
+							.Text(FText::FromString("Back"))
+							.OnClicked(this, &SGraphicsWidget::BackClicked)
 							.Cursor(EMouseCursor::Hand)
 						]
 					]
-					+ SVerticalBox::Slot().Padding(10.0f)
+					// Column 2
+					+ SHorizontalBox::Slot().Padding(10.0f)
 					[
-						SNew(SHorizontalBox)
-						+ SHorizontalBox::Slot().HAlign(HAlign_Left).AutoWidth()
+						SNew(SVerticalBox)
+						+ SVerticalBox::Slot().Padding(10.0f)
 						[
-							SNew(STextBlock)
-							.Text(FString("Resolution Scale"))
-							.ColorAndOpacity(FLinearColor::Black)
-						]
-						+ SHorizontalBox::Slot().HAlign(HAlign_Right)
+							SNew(SHorizontalBox)
+							+ SHorizontalBox::Slot().HAlign(HAlign_Left).AutoWidth()
+							[
+								SNew(STextBlock)
+								.Text(FString("Resolution Scale"))
+								.ColorAndOpacity(FLinearColor::Black)
+							]
+							+ SHorizontalBox::Slot().HAlign(HAlign_Right)
 							[
 								SAssignNew(this->ResScaleButton, STextComboBox)
 								.OptionsSource(&ScaleValues)
@@ -140,23 +137,42 @@ void SGraphicsWidget::Construct(const FArguments& args)
 								.Cursor(EMouseCursor::Hand)
 							]
 						]
-						/*+ SVerticalBox::Slot().Padding(10.0f)
+						+ SVerticalBox::Slot().Padding(10.0f)
 						[
-							SNew(SButton)
-							.HAlign(HAlign_Center)
-							.VAlign(VAlign_Center)
-							.Text(FText::FromString("Apply"))
-							.OnClicked(this, &SGraphicsWidget::ApplyClicked)
-							.Cursor(EMouseCursor::Hand)
-						]*/
-				]
-					// Column 3
-					/*+ SHorizontalBox::Slot().Padding(10.0f)
-					[
+							SNew(SHorizontalBox)
+							+ SHorizontalBox::Slot().HAlign(HAlign_Left).AutoWidth()
+							[
+								SNew(STextBlock)
+								.Text(FString("View Distance"))
+								.ColorAndOpacity(FLinearColor::Black)
+							]
+							+ SHorizontalBox::Slot().HAlign(HAlign_Right)
+								[
+									SAssignNew(this->ViewDistanceButton, STextComboBox)
+									.OptionsSource(&DistValues)
+									.OnSelectionChanged(this, &SGraphicsWidget::OnSelectedDist)
+									.InitiallySelectedItem(DistanceVal)
+									.Cursor(EMouseCursor::Hand)
+								]
+							]
+							/*+ SVerticalBox::Slot().Padding(10.0f)
+							[
+								SNew(SButton)
+								.HAlign(HAlign_Center)
+								.VAlign(VAlign_Center)
+								.Text(FText::FromString("Apply"))
+								.OnClicked(this, &SGraphicsWidget::ApplyClicked)
+								.Cursor(EMouseCursor::Hand)
+							]*/
+					]
+						// Column 3
+						/*+ SHorizontalBox::Slot().Padding(10.0f)
+						[
 						
-					]*/
+						]*/
 				
 				
+				]
 			]
         ];
 }
@@ -205,7 +221,6 @@ void SGraphicsWidget::OnSelectedRes(TSharedPtr<FString> Item, ESelectInfo::Type 
 	{
 		GEngine->GameViewport->ConsoleCommand("SETRES " + *Item + "w");
 	}
-	PendingChanges = true;
 }
 
 void SGraphicsWidget::OnSelectedScale(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo)
@@ -227,7 +242,27 @@ void SGraphicsWidget::OnSelectedScale(TSharedPtr<FString> Item, ESelectInfo::Typ
 	{
 		GEngine->GameViewport->ConsoleCommand("r.ScreenPercentage 50");
 	}
-	PendingChanges = true;
+}
+
+void SGraphicsWidget::OnSelectedDist(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo)
+{
+	DistanceVal = Item;
+	MenuHUD->UserViewDistance = *Item;
+	ViewDistanceButton->SetSelectedItem(Item);
+	ViewDistanceButton->RefreshOptions();
+
+	if (*Item == "Low")
+	{
+		GEngine->GameViewport->ConsoleCommand("r.ViewDistanceScale 0.4");
+	}
+	else if (*Item == "Medium")
+	{
+		GEngine->GameViewport->ConsoleCommand("r.ViewDistanceScale 0.7");
+	}
+	else if (*Item == "High")
+	{
+		GEngine->GameViewport->ConsoleCommand("r.ViewDistanceScale 1.0");
+	}
 }
 
 void SGraphicsWidget::MakeResolutions()
@@ -266,4 +301,11 @@ void SGraphicsWidget::MakeScaleValues()
 	ScaleValues.Add(MakeShareable(new FString("50%")));
 	ScaleValues.Add(MakeShareable(new FString("75%")));
 	ScaleValues.Add(MakeShareable(new FString("100%")));
+}
+
+void SGraphicsWidget::MakeDistValues()
+{
+	DistValues.Add(MakeShareable(new FString("Near")));
+	DistValues.Add(MakeShareable(new FString("Normal")));
+	DistValues.Add(MakeShareable(new FString("Far")));
 }

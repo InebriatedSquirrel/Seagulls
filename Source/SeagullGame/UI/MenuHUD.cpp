@@ -7,6 +7,8 @@
 #include "SeagullGame/UI/Widgets/OptionsWidget.h"
 #include "SeagullGame/UI/Widgets/LoadingScreenWidget.h"
 #include "SeagullGame/UI/Widgets/GraphicsWidget.h"
+#include "SeagullGame/UI/Widgets/MultiplayerMenuWidget.h"
+#include "SeagullGame/UI/Widgets/AudioWidget.h"
 #include "SeagullGame/SeagullsSaveGame.h"
 
 
@@ -31,6 +33,8 @@ void AMenuHUD::PostInitializeComponents()
 	UserTextures = "High";
 	UserEffects = "High";
 	UserDetail = "High";
+
+	UserNumMultiPlayers = FString("2 Players");
 
 	// Make sure the engine and viewport are valid
 	if (GEngine && GEngine->GameViewport)
@@ -71,6 +75,20 @@ void AMenuHUD::ApplySettings()
 	else if (UserResScale == "50%")
 	{
 		GEngine->GameViewport->ConsoleCommand("r.ScreenPercentage 50");
+	}
+
+	//View Distance
+	if (UserViewDistance == "Low")
+	{
+		GEngine->GameViewport->ConsoleCommand("r.ViewDistanceScale 0.4");
+	}
+	else if (UserViewDistance == "Medium")
+	{
+		GEngine->GameViewport->ConsoleCommand("r.ViewDistanceScale 0.7");
+	}
+	else if (UserViewDistance == "High")
+	{
+		GEngine->GameViewport->ConsoleCommand("r.ViewDistanceScale 1.0");
 	}
 }
 
@@ -133,10 +151,48 @@ void AMenuHUD::OpenGraphicsMenu()
 	CurrentMenu = "Graphics";
 }
 
+void AMenuHUD::OpenMultiplayerMenu()
+{
+	GEngine->GameViewport->RemoveAllViewportWidgets();
+
+	// Make sure the engine and viewport are valid
+	if (GEngine && GEngine->GameViewport)
+	{
+		UGameViewportClient* Viewport = GEngine->GameViewport;
+
+		SAssignNew(MultiplayerMenuWidget, SMultiplayerMenuWidget)
+			.MenuHUD(TWeakObjectPtr<AMenuHUD>(this));
+
+		Viewport->AddViewportWidgetContent(
+			SNew(SWeakWidget).PossiblyNullContent(MultiplayerMenuWidget.ToSharedRef())
+			);
+	}
+	CurrentMenu = "Multiplayer";
+}
+
+void AMenuHUD::OpenAudioMenu()
+{
+	GEngine->GameViewport->RemoveAllViewportWidgets();
+
+	// Make sure the engine and viewport are valid
+	if (GEngine && GEngine->GameViewport)
+	{
+		UGameViewportClient* Viewport = GEngine->GameViewport;
+
+		SAssignNew(AudioWidget, SAudioWidget)
+			.MenuHUD(TWeakObjectPtr<AMenuHUD>(this));
+
+		Viewport->AddViewportWidgetContent(
+			SNew(SWeakWidget).PossiblyNullContent(AudioWidget.ToSharedRef())
+			);
+	}
+	CurrentMenu = "Audio";
+}
+
 void AMenuHUD::ExitMenu()
 {
 	// If currently in the Graphics menu, return to options
-	if (CurrentMenu == "Graphics")
+	if (CurrentMenu == "Graphics" || CurrentMenu == "Audio" || CurrentMenu == "Controls")
 	{
 		GEngine->GameViewport->RemoveAllViewportWidgets();
 

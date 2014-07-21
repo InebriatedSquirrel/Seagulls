@@ -79,8 +79,7 @@ FReply SMainMenuWidget::SinglePlayerClicked()
 
 FReply SMainMenuWidget::MultiPlayerClicked()
 {
-	MenuHUD->OpenLoadingScreen();
-	MenuHUD->MultiPlayerClicked();
+	MenuHUD->OpenMultiplayerMenu();
 	return FReply::Handled();
 }
 
