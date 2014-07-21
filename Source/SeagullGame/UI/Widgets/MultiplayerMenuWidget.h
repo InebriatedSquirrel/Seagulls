@@ -31,12 +31,12 @@ private:
 	TArray<TSharedPtr<FString>> MapValues;
 	void MakeMapValues();
 	TSharedPtr<STextComboBox> MapButton;
-	void SMultiplayerMenuWidget::OnSelectedMap(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo);
+	void OnSelectedMap(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo);
 
 	TArray<TSharedPtr<FString>> PlayerNumValues;
 	void MakePlayerNumValues();
 	TSharedPtr<STextComboBox> PlayerNumButton;
-	void SMultiplayerMenuWidget::OnSelectedPlayerNum(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo);
+	void OnSelectedPlayerNum(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo);
 
 	FReply PlayMultiClicked();
 	FReply PlayerNumClicked();

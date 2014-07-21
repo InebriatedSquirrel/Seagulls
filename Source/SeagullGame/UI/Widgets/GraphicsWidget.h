@@ -33,19 +33,19 @@ private:
 	TArray<TSharedPtr<FString>> Resolutions;
 	void MakeResolutions();
 	TSharedPtr<STextComboBox> ResolutionButton;
-	void SGraphicsWidget::OnSelectedRes(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo);
+	void OnSelectedRes(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo);
 	
 	// Resolution Scale
 	TArray<TSharedPtr<FString>> ScaleValues;
 	void MakeScaleValues();
 	TSharedPtr<STextComboBox> ResScaleButton;
-	void SGraphicsWidget::OnSelectedScale(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo);
+	void OnSelectedScale(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo);
 
 	// View Distance
 	TArray<TSharedPtr<FString>> DistValues;
 	void MakeDistValues();
 	TSharedPtr<STextComboBox> ViewDistanceButton;
-	void SGraphicsWidget::OnSelectedDist(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo);
+	void OnSelectedDist(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo);
 
 	// Fullscreen toggle
 	TSharedPtr<SCheckBox> FullscreenButton;
@@ -55,7 +55,7 @@ private:
 	FReply BackClicked();
 	FReply ApplyClicked();
 
-	TSharedRef<SWidget> SGraphicsWidget::OnGenerateWidget(TSharedPtr<FString> Item);
+	TSharedRef<SWidget> OnGenerateWidget(TSharedPtr<FString> Item);
 
     //Stores a weak reference to the HUD controlling this class.
     TWeakObjectPtr<class AMenuHUD> MenuHUD;
