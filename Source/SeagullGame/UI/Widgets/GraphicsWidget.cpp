@@ -125,6 +125,8 @@ void SGraphicsWidget::Construct(const FArguments& args)
 							.Text(FText::FromString("Back"))
 							.OnClicked(this, &SGraphicsWidget::BackClicked)
 							.Cursor(EMouseCursor::Hand)
+							.ButtonStyle(&MenuStyle->MenuButtonStyle)
+							.TextStyle(&MenuStyle->MenuButtonTextStyle)
 						]
 					]
 					// Column 2

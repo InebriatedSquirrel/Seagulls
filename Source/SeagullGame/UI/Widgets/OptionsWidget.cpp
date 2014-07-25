@@ -26,6 +26,8 @@ void SOptionsWidget::Construct(const FArguments& args)
 							.VAlign(VAlign_Center)
 							.Text(FText::FromString("Graphics"))
 							.OnClicked(this, &SOptionsWidget::GraphicsClicked)
+							.ButtonStyle(&MenuStyle->MenuButtonStyle)
+							.TextStyle(&MenuStyle->MenuButtonTextStyle)
 					]
 					+ SVerticalBox::Slot().Padding(10.0f)
 					[
@@ -34,6 +36,8 @@ void SOptionsWidget::Construct(const FArguments& args)
 							.VAlign(VAlign_Center)
 							.Text(FText::FromString("Controls"))
 							.OnClicked(this, &SOptionsWidget::ControlsClicked)
+							.ButtonStyle(&MenuStyle->MenuButtonStyle)
+							.TextStyle(&MenuStyle->MenuButtonTextStyle)
 					]
 					+ SVerticalBox::Slot().Padding(10.0f)
 					[
@@ -42,6 +46,8 @@ void SOptionsWidget::Construct(const FArguments& args)
 							.VAlign(VAlign_Center)
 							.Text(FText::FromString("Audio"))
 							.OnClicked(this, &SOptionsWidget::AudioClicked)
+							.ButtonStyle(&MenuStyle->MenuButtonStyle)
+							.TextStyle(&MenuStyle->MenuButtonTextStyle)
 					]
 					+ SVerticalBox::Slot().Padding(10.0f)
 					[
@@ -50,6 +56,8 @@ void SOptionsWidget::Construct(const FArguments& args)
 							.VAlign(VAlign_Center)
 							.Text(FText::FromString("Back"))
 							.OnClicked(this, &SOptionsWidget::BackClicked)
+							.ButtonStyle(&MenuStyle->MenuButtonStyle)
+							.TextStyle(&MenuStyle->MenuButtonTextStyle)
 					]
                 ]
         ];
