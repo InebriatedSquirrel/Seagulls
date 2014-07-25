@@ -25,48 +25,63 @@ void SMainMenuWidget::Construct(const FArguments& args)
                 .HAlign(HAlign_Center)
                 .VAlign(VAlign_Center)
                 [
-                    SNew(SVerticalBox)
-					+ SVerticalBox::Slot().Padding(10.0f)
-                        [
-                            SNew(SButton)
-								.HAlign(HAlign_Center)
-								.VAlign(VAlign_Center)
-                                .Text(FText::FromString("Single Player"))
-                                .OnClicked(this, &SMainMenuWidget::SinglePlayerClicked)
-                        ]
-					+ SVerticalBox::Slot().Padding(10.0f)
-						[
-							SNew(SButton)
-								.HAlign(HAlign_Center)
-								.VAlign(VAlign_Center)
-								.Text(FText::FromString("Multi Player"))
-								.OnClicked(this, &SMainMenuWidget::MultiPlayerClicked)
-						]
-					+ SVerticalBox::Slot().Padding(10.0f)
-						[
-							SNew(SButton)
-								.HAlign(HAlign_Center)
-								.VAlign(VAlign_Center)
-								.Text(FText::FromString("Options"))
-								.OnClicked(this, &SMainMenuWidget::OptionsClicked)
-						]
-					+ SVerticalBox::Slot().Padding(10.0f)
-						[
-							SNew(SButton)
-								.HAlign(HAlign_Center)
-								.VAlign(VAlign_Center)
-								.Text(FText::FromString("Credits"))
-								.OnClicked(this, &SMainMenuWidget::CreditsClicked)
-						]
-					+ SVerticalBox::Slot().Padding(10.0f)
-                        [
-                            SNew(SButton)
-								.HAlign(HAlign_Center)
-								.VAlign(VAlign_Center)
-								.Text(FText::FromString("Quit Game"))
-								.OnClicked(this, &SMainMenuWidget::QuitGameClicked)
-                        ]
-                ]
+					SNew(SHorizontalBox)
+					+ SHorizontalBox::Slot().FillWidth(4.0f)
+					[
+						SNew(SVerticalBox)
+						+ SVerticalBox::Slot().Padding(10.0f).FillHeight(4.0f)
+							[
+								SNew(SButton)
+									.HAlign(HAlign_Center)
+									.VAlign(VAlign_Center)
+									.Text(FText::FromString("Single Player"))
+									.OnClicked(this, &SMainMenuWidget::SinglePlayerClicked)
+									.ButtonStyle(&MenuStyle->MenuButtonStyle)
+									.TextStyle(&MenuStyle->MenuButtonTextStyle)
+							]
+						+ SVerticalBox::Slot().Padding(10.0f).FillHeight(4.0f)
+							[
+								SNew(SButton)
+									.HAlign(HAlign_Center)
+									.VAlign(VAlign_Center)
+									.Text(FText::FromString("Multi Player"))
+									.OnClicked(this, &SMainMenuWidget::MultiPlayerClicked)
+									.ButtonStyle(&MenuStyle->MenuButtonStyle)
+									.TextStyle(&MenuStyle->MenuButtonTextStyle)
+							]
+						+ SVerticalBox::Slot().Padding(10.0f).FillHeight(4.0f)
+							[
+								SNew(SButton)
+									.HAlign(HAlign_Center)
+									.VAlign(VAlign_Center)
+									.Text(FText::FromString("Options"))
+									.OnClicked(this, &SMainMenuWidget::OptionsClicked)
+									.ButtonStyle(&MenuStyle->MenuButtonStyle)
+									.TextStyle(&MenuStyle->MenuButtonTextStyle)
+							]
+						+ SVerticalBox::Slot().Padding(10.0f).FillHeight(4.0f)
+							[
+								SNew(SButton)
+									.HAlign(HAlign_Center)
+									.VAlign(VAlign_Center)
+									.Text(FText::FromString("Credits"))
+									.OnClicked(this, &SMainMenuWidget::CreditsClicked)
+									.ButtonStyle(&MenuStyle->MenuButtonStyle)
+									.TextStyle(&MenuStyle->MenuButtonTextStyle)
+							]
+						+ SVerticalBox::Slot().Padding(10.0f).FillHeight(4.0f)
+							[
+								SNew(SButton)
+									.HAlign(HAlign_Center)
+									.VAlign(VAlign_Center)
+									.Text(FText::FromString("Quit Game"))
+									.OnClicked(this, &SMainMenuWidget::QuitGameClicked)
+									.ButtonStyle(&MenuStyle->MenuButtonStyle)
+									.TextStyle(&MenuStyle->MenuButtonTextStyle)
+								
+							]
+					]
+				]
         ];
 }
  
