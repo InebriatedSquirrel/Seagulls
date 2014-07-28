@@ -29,7 +29,7 @@ void SOptionsWidget::Construct(const FArguments& args)
 							.ButtonStyle(&MenuStyle->MenuButtonStyle)
 							.TextStyle(&MenuStyle->MenuButtonTextStyle)
 					]
-					+ SVerticalBox::Slot().Padding(10.0f)
+					/*+ SVerticalBox::Slot().Padding(10.0f)
 					[
 						SNew(SButton)
 							.HAlign(HAlign_Center)
@@ -38,7 +38,7 @@ void SOptionsWidget::Construct(const FArguments& args)
 							.OnClicked(this, &SOptionsWidget::ControlsClicked)
 							.ButtonStyle(&MenuStyle->MenuButtonStyle)
 							.TextStyle(&MenuStyle->MenuButtonTextStyle)
-					]
+					]*/
 					+ SVerticalBox::Slot().Padding(10.0f)
 					[
 						SNew(SButton)
