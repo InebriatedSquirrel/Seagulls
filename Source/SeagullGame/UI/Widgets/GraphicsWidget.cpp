@@ -50,6 +50,18 @@ void SGraphicsWidget::Construct(const FArguments& args)
 
 	}
 
+	this->MakeAAValues();
+	// Set the initial View Distance value
+	for (int32 i = 0; i < AAValues.Num(); i++)
+	{
+		if (*AAValues[i] == *MenuHUD->UserAA)
+		{
+			AAVal = AAValues[i];
+			break;
+		}
+
+	}
+
 	// Slate widget building
 	ChildSlot
 		[
@@ -113,6 +125,8 @@ void SGraphicsWidget::Construct(const FArguments& args)
 							.Text(FText::FromString("Back"))
 							.OnClicked(this, &SGraphicsWidget::BackClicked)
 							.Cursor(EMouseCursor::Hand)
+							.ButtonStyle(&MenuStyle->MenuButtonStyle)
+							.TextStyle(&MenuStyle->MenuButtonTextStyle)
 						]
 					]
 					// Column 2
@@ -147,14 +161,32 @@ void SGraphicsWidget::Construct(const FArguments& args)
 								.ColorAndOpacity(FLinearColor::Black)
 							]
 							+ SHorizontalBox::Slot().HAlign(HAlign_Right)
+							[
+								SAssignNew(this->ViewDistanceButton, STextComboBox)
+								.OptionsSource(&DistValues)
+								.OnSelectionChanged(this, &SGraphicsWidget::OnSelectedDist)
+								.InitiallySelectedItem(DistanceVal)
+								.Cursor(EMouseCursor::Hand)
+							]
+						]
+						+ SVerticalBox::Slot().Padding(10.0f)
+						[
+							SNew(SHorizontalBox)
+							+ SHorizontalBox::Slot().HAlign(HAlign_Left).AutoWidth()
+							[
+								SNew(STextBlock)
+								.Text(FString("Anti-Aliasing Level"))
+								.ColorAndOpacity(FLinearColor::Black)
+							]
+							+ SHorizontalBox::Slot().HAlign(HAlign_Right)
 								[
-									SAssignNew(this->ViewDistanceButton, STextComboBox)
-									.OptionsSource(&DistValues)
-									.OnSelectionChanged(this, &SGraphicsWidget::OnSelectedDist)
-									.InitiallySelectedItem(DistanceVal)
+									SAssignNew(this->AAButton, STextComboBox)
+									.OptionsSource(&AAValues)
+									.OnSelectionChanged(this, &SGraphicsWidget::OnSelectedAA)
+									.InitiallySelectedItem(AAVal)
 									.Cursor(EMouseCursor::Hand)
 								]
-							]
+						]
 							/*+ SVerticalBox::Slot().Padding(10.0f)
 							[
 								SNew(SButton)
@@ -265,6 +297,24 @@ void SGraphicsWidget::OnSelectedDist(TSharedPtr<FString> Item, ESelectInfo::Type
 	}
 }
 
+void SGraphicsWidget::OnSelectedAA(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo)
+{
+	AAVal = Item;
+	MenuHUD->UserAA = *Item;
+	AAButton->SetSelectedItem(Item);
+	AAButton->RefreshOptions();
+
+	if (*Item == "None")
+	{
+		GEngine->GameViewport->ConsoleCommand("r.PostProcessAAQuality 0");
+	}
+	else
+	{
+		GEngine->GameViewport->ConsoleCommand("r.PostProcessAAQuality " + *Item);
+	}
+	
+}
+
 void SGraphicsWidget::MakeResolutions()
 {
 	// Load up resolution values
@@ -308,4 +358,12 @@ void SGraphicsWidget::MakeDistValues()
 	DistValues.Add(MakeShareable(new FString("Near")));
 	DistValues.Add(MakeShareable(new FString("Normal")));
 	DistValues.Add(MakeShareable(new FString("Far")));
+}
+
+void SGraphicsWidget::MakeAAValues()
+{
+	AAValues.Add(MakeShareable(new FString("None")));
+	AAValues.Add(MakeShareable(new FString("2")));
+	AAValues.Add(MakeShareable(new FString("4")));
+	AAValues.Add(MakeShareable(new FString("6")));
 }

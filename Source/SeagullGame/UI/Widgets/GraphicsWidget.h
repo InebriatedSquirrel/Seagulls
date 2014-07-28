@@ -24,6 +24,8 @@ public:
 	bool isFullscreen = false;
 	TSharedPtr<FString> ResScaleVal;
 	TSharedPtr<FString> DistanceVal;
+	TSharedPtr<FString> AAVal;
+
  
 private:
 
@@ -46,6 +48,12 @@ private:
 	void MakeDistValues();
 	TSharedPtr<STextComboBox> ViewDistanceButton;
 	void OnSelectedDist(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo);
+
+	// Anti Aliasing
+	TArray<TSharedPtr<FString>> AAValues;
+	void MakeAAValues();
+	TSharedPtr<STextComboBox> AAButton;
+	void OnSelectedAA(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo);
 
 	// Fullscreen toggle
 	TSharedPtr<SCheckBox> FullscreenButton;
