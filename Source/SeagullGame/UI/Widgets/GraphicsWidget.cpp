@@ -117,7 +117,7 @@ void SGraphicsWidget::Construct(const FArguments& args)
 								.IsChecked(CheckFullScreen())
 							]
 						]
-						+ SVerticalBox::Slot().Padding(10.0f)
+						+ SVerticalBox::Slot().Padding(10.0f).FillHeight(4.0f)
 						[
 							SNew(SButton)
 							.HAlign(HAlign_Center)

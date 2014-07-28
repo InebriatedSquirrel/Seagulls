@@ -51,21 +51,25 @@ void SMultiplayerMenuWidget::Construct(const FArguments& args)
 						.InitiallySelectedItem(PlayerNum)
 						.Cursor(EMouseCursor::Hand)
 					]
-					+ SVerticalBox::Slot().Padding(10.0f)
+					+ SVerticalBox::Slot().Padding(10.0f).FillHeight(4.0f)
 					[
 						SNew(SButton)
 							.HAlign(HAlign_Center)
 							.VAlign(VAlign_Center)
 							.Text(FText::FromString("Play"))
 							.OnClicked(this, &SMultiplayerMenuWidget::PlayMultiClicked)
+							.ButtonStyle(&MenuStyle->MenuButtonStyle)
+							.TextStyle(&MenuStyle->MenuButtonTextStyle)
 					]
-					+ SVerticalBox::Slot().Padding(10.0f)
+					+ SVerticalBox::Slot().Padding(10.0f).FillHeight(4.0f)
 					[
 						SNew(SButton)
 						.HAlign(HAlign_Center)
 						.VAlign(VAlign_Center)
 						.Text(FText::FromString("Back"))
 						.OnClicked(this, &SMultiplayerMenuWidget::BackClicked)
+						.ButtonStyle(&MenuStyle->MenuButtonStyle)
+						.TextStyle(&MenuStyle->MenuButtonTextStyle)
 					]
                 ]
         ];
