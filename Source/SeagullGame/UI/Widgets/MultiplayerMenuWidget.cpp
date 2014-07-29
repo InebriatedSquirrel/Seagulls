@@ -35,7 +35,7 @@ void SMultiplayerMenuWidget::Construct(const FArguments& args)
                 .VAlign(VAlign_Center)
                 [
 					SNew(SVerticalBox)
-					+ SVerticalBox::Slot().Padding(10.0f)
+					+ SVerticalBox::Slot().Padding(5.0f).AutoHeight()
 					[
 						SAssignNew(this->MapButton, STextComboBox)
 						.OptionsSource(&MapValues)
@@ -43,7 +43,7 @@ void SMultiplayerMenuWidget::Construct(const FArguments& args)
 						.InitiallySelectedItem(MapValue)
 						.Cursor(EMouseCursor::Hand)
 					]
-					+ SVerticalBox::Slot().Padding(10.0f)
+					+ SVerticalBox::Slot().Padding(10.0f).AutoHeight()
 					[
 						SAssignNew(this->PlayerNumButton, STextComboBox)
 						.OptionsSource(&PlayerNumValues)
@@ -51,21 +51,25 @@ void SMultiplayerMenuWidget::Construct(const FArguments& args)
 						.InitiallySelectedItem(PlayerNum)
 						.Cursor(EMouseCursor::Hand)
 					]
-					+ SVerticalBox::Slot().Padding(10.0f)
+					+ SVerticalBox::Slot().Padding(5.0f).FillHeight(4.0f)
 					[
 						SNew(SButton)
 							.HAlign(HAlign_Center)
 							.VAlign(VAlign_Center)
 							.Text(FText::FromString("Play"))
 							.OnClicked(this, &SMultiplayerMenuWidget::PlayMultiClicked)
+							.ButtonStyle(&MenuStyle->MenuButtonStyle)
+							.TextStyle(&MenuStyle->MenuButtonTextStyle)
 					]
-					+ SVerticalBox::Slot().Padding(10.0f)
+					+ SVerticalBox::Slot().Padding(10.0f).FillHeight(4.0f)
 					[
 						SNew(SButton)
 						.HAlign(HAlign_Center)
 						.VAlign(VAlign_Center)
 						.Text(FText::FromString("Back"))
 						.OnClicked(this, &SMultiplayerMenuWidget::BackClicked)
+						.ButtonStyle(&MenuStyle->MenuButtonStyle)
+						.TextStyle(&MenuStyle->MenuButtonTextStyle)
 					]
                 ]
         ];

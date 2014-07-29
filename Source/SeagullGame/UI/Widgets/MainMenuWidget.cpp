@@ -7,29 +7,38 @@
  
 void SMainMenuWidget::Construct(const FArguments& args)
 {
-    MenuHUD = args._MenuHUD;
+	MenuHUD = args._MenuHUD;
 
 	MenuStyle = &FMenuStyles::Get().GetWidgetStyle<FGlobalStyle>("GlobalMenuStyle");
 
-    ChildSlot
-        [
-            SNew(SOverlay)
-            + SOverlay::Slot()
-                .HAlign(HAlign_Center)
-                .VAlign(VAlign_Top)
-                [
-					SNew(SImage)
-					.Image(&MenuStyle->LogoBrush)
-                ]
-            + SOverlay::Slot()
-                .HAlign(HAlign_Center)
-                .VAlign(VAlign_Center)
-                [
-					SNew(SHorizontalBox)
-					+ SHorizontalBox::Slot().FillWidth(4.0f)
+	ChildSlot
+		[
+			SNew(SOverlay)
+			/*+ SOverlay::Slot()
+			.HAlign(HAlign_Center)
+			.VAlign(VAlign_Center)
+			[
+				SNew(SImage)
+				.Image(&MenuStyle->LogoBrush)
+			]*/
+			+ SOverlay::Slot()
+				.HAlign(HAlign_Center)
+				.VAlign(VAlign_Center)
+				[
+					SNew(SVerticalBox)
+					+ SVerticalBox::Slot().Padding(10.0f).AutoHeight().VAlign(VAlign_Center).HAlign(HAlign_Center)
 					[
-						SNew(SVerticalBox)
-						+ SVerticalBox::Slot().Padding(10.0f).FillHeight(4.0f)
+						SNew(SImage)
+						.Image(&MenuStyle->LogoBrush)
+					]
+					+ SVerticalBox::Slot().Padding(10.0f).AutoHeight().VAlign(VAlign_Center).HAlign(HAlign_Center)
+					[
+						SNew(SHorizontalBox)
+						+ SHorizontalBox::Slot().MaxWidth(200.f)
+						[
+							SNew(SVerticalBox)
+							
+							+ SVerticalBox::Slot().Padding(10.0f).FillHeight(4.0f)
 							[
 								SNew(SButton)
 									.HAlign(HAlign_Center)
@@ -39,7 +48,7 @@ void SMainMenuWidget::Construct(const FArguments& args)
 									.ButtonStyle(&MenuStyle->MenuButtonStyle)
 									.TextStyle(&MenuStyle->MenuButtonTextStyle)
 							]
-						+ SVerticalBox::Slot().Padding(10.0f).FillHeight(4.0f)
+							+ SVerticalBox::Slot().Padding(10.0f).FillHeight(4.0f)
 							[
 								SNew(SButton)
 									.HAlign(HAlign_Center)
@@ -49,7 +58,7 @@ void SMainMenuWidget::Construct(const FArguments& args)
 									.ButtonStyle(&MenuStyle->MenuButtonStyle)
 									.TextStyle(&MenuStyle->MenuButtonTextStyle)
 							]
-						+ SVerticalBox::Slot().Padding(10.0f).FillHeight(4.0f)
+							+ SVerticalBox::Slot().Padding(10.0f).FillHeight(4.0f)
 							[
 								SNew(SButton)
 									.HAlign(HAlign_Center)
@@ -59,7 +68,7 @@ void SMainMenuWidget::Construct(const FArguments& args)
 									.ButtonStyle(&MenuStyle->MenuButtonStyle)
 									.TextStyle(&MenuStyle->MenuButtonTextStyle)
 							]
-						+ SVerticalBox::Slot().Padding(10.0f).FillHeight(4.0f)
+							+ SVerticalBox::Slot().Padding(10.0f).FillHeight(4.0f)
 							[
 								SNew(SButton)
 									.HAlign(HAlign_Center)
@@ -69,7 +78,7 @@ void SMainMenuWidget::Construct(const FArguments& args)
 									.ButtonStyle(&MenuStyle->MenuButtonStyle)
 									.TextStyle(&MenuStyle->MenuButtonTextStyle)
 							]
-						+ SVerticalBox::Slot().Padding(10.0f).FillHeight(4.0f)
+							+ SVerticalBox::Slot().Padding(10.0f).FillHeight(4.0f)
 							[
 								SNew(SButton)
 									.HAlign(HAlign_Center)
@@ -80,6 +89,7 @@ void SMainMenuWidget::Construct(const FArguments& args)
 									.TextStyle(&MenuStyle->MenuButtonTextStyle)
 								
 							]
+						]
 					]
 				]
         ];

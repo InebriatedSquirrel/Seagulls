@@ -25,7 +25,7 @@ private:
 	const struct FGlobalStyle* MenuStyle;
 
 	FReply BackClicked();
- 
+
     //Stores a weak reference to the HUD controlling this class.
     TWeakObjectPtr<class AMenuHUD> MenuHUD;
 };

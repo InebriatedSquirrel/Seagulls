@@ -19,21 +19,25 @@ void SPauseWidget::Construct(const FArguments& args)
                 .VAlign(VAlign_Center)
                 [
 					SNew(SVerticalBox)
-					+ SVerticalBox::Slot().Padding(10.0f)
+					+ SVerticalBox::Slot().Padding(10.0f).FillHeight(4.0f)
 					[
 						SNew(SButton)
 						.HAlign(HAlign_Center)
 						.VAlign(VAlign_Center)
 						.Text(FText::FromString("Resume"))
 						.OnClicked(this, &SPauseWidget::ResumeClicked)
+						.ButtonStyle(&MenuStyle->MenuButtonStyle)
+						.TextStyle(&MenuStyle->MenuButtonTextStyle)
 					]
-					+ SVerticalBox::Slot().Padding(10.0f)
+					+ SVerticalBox::Slot().Padding(10.0f).FillHeight(4.0f)
 					[
 						SNew(SButton)
 						.HAlign(HAlign_Center)
 						.VAlign(VAlign_Center)
 						.Text(FText::FromString("Exit"))
 						.OnClicked(this, &SPauseWidget::ExitClicked)
+						.ButtonStyle(&MenuStyle->MenuButtonStyle)
+						.TextStyle(&MenuStyle->MenuButtonTextStyle)
 					]
 					
                 ]
