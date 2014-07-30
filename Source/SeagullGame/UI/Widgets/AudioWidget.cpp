@@ -31,6 +31,8 @@ void SAudioWidget::Construct(const FArguments& args)
 						[
 							SNew(SVolumeControl)
 							.Cursor(EMouseCursor::Hand)
+							//.OnVolumeChanged(SAudioWidget::OnVolumeChanged)
+							
 						]
 
 					]
@@ -55,3 +57,10 @@ FReply SAudioWidget::BackClicked()
 
 	return FReply::Handled();
 }
+
+// SAudioWidget::OnVolumeChanged()
+//{
+//	MenuHUD->ExitMenu();
+//	
+//
+//}

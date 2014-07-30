@@ -111,7 +111,7 @@ void SMultiplayerMenuWidget::OnSelectedPlayerNum(TSharedPtr<FString> Item, ESele
 
 void SMultiplayerMenuWidget::MakeMapValues()
 {
-	MapValues.Add(MakeShareable(new FString("MultiplayerOrphanDrop")));
+	MapValues.Add(MakeShareable(new FString("MultiplayerBoxDrop")));
 	MapValues.Add(MakeShareable(new FString("MultiplayerDestruction")));
 	MapValues.Add(MakeShareable(new FString("MultiplayerShootEmUp")));
 }
