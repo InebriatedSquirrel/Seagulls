@@ -113,11 +113,12 @@ void SMultiplayerMenuWidget::MakeMapValues()
 {
 	MapValues.Add(MakeShareable(new FString("MultiplayerOrphanDrop")));
 	MapValues.Add(MakeShareable(new FString("MultiplayerDestruction")));
+	MapValues.Add(MakeShareable(new FString("MultiplayerShootEmUp")));
 }
 
 void SMultiplayerMenuWidget::MakePlayerNumValues()
 {
 	PlayerNumValues.Add(MakeShareable(new FString("2 Players")));
-	PlayerNumValues.Add(MakeShareable(new FString("3 Players")));
+	//PlayerNumValues.Add(MakeShareable(new FString("3 Players")));
 	PlayerNumValues.Add(MakeShareable(new FString("4 Players")));
 }
